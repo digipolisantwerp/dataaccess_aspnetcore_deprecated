@@ -1,0 +1,9 @@
+{
+	"version": "1.0.0",
+	"name": "Toolbox.DataAccess",
+	"private": true,
+	"devDependencies": {
+		"gulp": "3.9.0",
+		"gulp-doctoc": "0.1.3"
+	}
+}

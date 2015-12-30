@@ -1,0 +1,21 @@
+{
+    "version": "1.0.0-*",
+    "description": "DataAccess Toolbox unit tests",
+    "authors": [ "digipolis.be" ],
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": "",
+	"dependencies": {
+		"Toolbox.DataAccess": "",
+		"Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
+		"Moq": "4.2.1510.2205",
+		"xunit": "2.1.0-rc2-build3176",
+		"xunit.runner.dnx": "2.1.0-rc2-build208"
+	},
+    "commands": {
+        "test": "xunit.runner.dnx"
+    },
+    "frameworks": {
+        "dnx451": { }
+    }
+}
