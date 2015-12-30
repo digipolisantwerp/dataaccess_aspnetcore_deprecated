@@ -39,9 +39,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    ...,
     "Toolbox.DataAccess":  "1.3.0", 
-    ...
  }
 ```
 
