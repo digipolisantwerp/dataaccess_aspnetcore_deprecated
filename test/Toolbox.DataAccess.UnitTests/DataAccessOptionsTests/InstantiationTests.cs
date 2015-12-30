@@ -20,55 +20,9 @@ namespace Toolbox.DataAccess.UnitTests.DataAccessOptionsTests
         [Fact]
         private void ConnectionStringIsSet()
         {
-            var connectionString = new ConnectionString("host", 1234, "db", "user", "pwd");
+            var connectionString = new TestConnectionString("host", 1234, "db", "user", "pwd");
             var options = new DataAccessOptions(connectionString);
             Assert.Same(connectionString, options.ConnectionString);
-        }
-
-        [Fact]
-        private void JsonFilenameNullRaisesArgumentNullException()
-        {
-            string nullString = null;
-            var serviceCollection = new ServiceCollection();
-            var ex = Assert.Throws<ArgumentNullException>(() => serviceCollection.AddDataAccess<EntityContextBase>(nullString));
-            Assert.Equal("optionsFilePath", ex.ParamName);
-        }
-
-        [Fact]
-        private void JsonFilenameEmptyRaisesArgumentException()
-        {
-            var emptyString = "";
-            var serviceCollection = new ServiceCollection();
-            var ex = Assert.Throws<ArgumentException>(() => serviceCollection.AddDataAccess<EntityContextBase>(emptyString));
-            Assert.Equal("optionsFilePath", ex.ParamName);
-        }
-
-        [Fact]
-        private void JsonFilenameWhiteSpaceRaisesArgumentException()
-        {
-            var spaces = "  ";
-
-            var serviceCollection = new ServiceCollection();
-            var ex = Assert.Throws<ArgumentException>(() => serviceCollection.AddDataAccess<EntityContextBase>(spaces));
-            Assert.Equal("optionsFilePath", ex.ParamName);
-        }
-
-        [Fact]
-        private void JsonFileInstantiatesConnectionString()
-        {
-            var jsonFilename = "_TestData/dbconfig.json";
-            
-            var serviceCollection = new ServiceCollection();
-            IServiceCollection collection = serviceCollection.AddDataAccess<EntityContextBase>(jsonFilename);
-
-            var options = collection.BuildServiceProvider().GetService<DataAccessOptions>();
-
-            Assert.NotNull(options.ConnectionString);
-            Assert.Equal("host", options.ConnectionString.Host);
-            Assert.Equal(1234, options.ConnectionString.Port);
-            Assert.Equal("db", options.ConnectionString.DbName);
-            Assert.Equal("user", options.ConnectionString.User);
-            Assert.Equal("pwd", options.ConnectionString.Password);
         }
     }
 }

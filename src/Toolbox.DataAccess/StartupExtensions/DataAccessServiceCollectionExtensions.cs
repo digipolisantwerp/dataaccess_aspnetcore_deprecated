@@ -37,13 +37,15 @@ namespace Toolbox.DataAccess.StartupExtensions
             builder.AddJsonFile(jsonFilename);
             var config = builder.Build();
 
-            var host = config.Get(ConfigKeys.ConnectionString.Host);
-            var port = config.Get(ConfigKeys.ConnectionString.Port);
-            var dbname = config.Get(ConfigKeys.ConnectionString.DbName);
-            var user = config.Get(ConfigKeys.ConnectionString.User);
-            var pwd = config.Get(ConfigKeys.ConnectionString.Password);
+            //var host = config.Get(ConfigKeys.ConnectionString.Host);
+            //var port = config.Get(ConfigKeys.ConnectionString.Port);
+            //var dbname = config.Get(ConfigKeys.ConnectionString.DbName);
+            //var user = config.Get(ConfigKeys.ConnectionString.User);
+            //var pwd = config.Get(ConfigKeys.ConnectionString.Password);
 
-            return new ConnectionString(host, port, dbname, user, pwd);
+            //return new ConnectionString(host, port, dbname, user, pwd);
+
+            return null;
         }
 
         private static void RegisterDataAccess<TEntityContext>(IServiceCollection services, DataAccessOptions options) where TEntityContext : EntityContextBase
