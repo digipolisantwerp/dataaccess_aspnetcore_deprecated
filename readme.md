@@ -45,15 +45,17 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 Alternatively, it can also be added via the NuGet Package Manager interface.
 
-## Configuration
+## Configuration in Startup
 
-The DataAccess framework is registered and configured in the ConfigureServices method of the Startup class.
+### ConfigureServices
+
+The DataAccess framework is registered in the _*ConfigureServices*_ method of the *Startup* class.
 
 There are 2 ways to configure the DataAccess framework :
 - by passing a path to a json config file to the AddDataAccess method
 - by passing a DataAccessOptions instance to the AddDataAccess method
 
-### Path to json config file 
+#### Path to json config file 
 
 The DataAccess framework will read the json file and create a DataAccessOptions instance.
 
@@ -78,7 +80,7 @@ The config file has to contain the following section :
 ```
 Port is optional, it can be omitted. If it is included it must contain a valid port number (numeric value from 0 to 65535).
 
-### DataAccessOptions
+#### DataAccessOptions
 
 You can also instantiate and populate a DataAccessOptions object yourself and pass it directly to the AddDataAccess method.
 
@@ -90,14 +92,15 @@ services.AddDataAccess<MyEntityContext>(dataAccessOptions);
 
 When you don't need to specify a port in the connection string, pass 0 to it.  
 
-------------------------------
+### Configure
 
-
-Een configuratie moet ingeladen worden in de Configure method van de Startup class, hierin wordt de DbConfiguration geladen, standaard zal de PostgresDbConfiguration geladen worden zoals gedefineerd in onderstaand voorbeeld
+The _*Configure*_ method of the *Startup* class, initiates the DataAccess framework :
 
 ``` csharp
     app.UseDataAccess();
 ```
+
+---------------------
 
 De PostgresDbConfiguration class
 ``` csharp
