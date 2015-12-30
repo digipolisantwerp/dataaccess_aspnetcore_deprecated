@@ -16,11 +16,12 @@ It contains :
 
 
 - [Installation](#installation)
-- [Configuration](#configuration)
-  - [Path to json config file](#path-to-json-config-file)
-  - [DataAccessOptions](#dataaccessoptions)
-- [
-](#)
+- [Configuration in Startup](#configuration-in-startup)
+  - [ConfigureServices](#configureservices)
+    - [Path to json config file](#path-to-json-config-file)
+    - [DataAccessOptions](#dataaccessoptions)
+  - [Configure](#configure)
+- [](#)
 - [EntityContext](#entitycontext)
 - [Entities](#entities)
 - [Gebruik](#gebruik)
