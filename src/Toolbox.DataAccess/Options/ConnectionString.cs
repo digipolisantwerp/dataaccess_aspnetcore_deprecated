@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Toolbox.DataAccess.Options
+namespace Toolbox.DataAccess
 {
-    public abstract class ConnectionString
+    public class ConnectionString
     {
-        protected ConnectionString(string host, ushort port, string dbname, string user, string password)
+        public ConnectionString(string host, ushort port, string dbname, string user = null, string password = null)
         {
-            ValidateArguments(host, dbname, user, password);
+            ValidateArguments(host, dbname);
             Host = host;
             Port = port;
             DbName = dbname;
@@ -14,23 +14,36 @@ namespace Toolbox.DataAccess.Options
             Password = password;
         }
 
-        public string Host { get; private set; }
-        public ushort Port { get; private set; }
-        public string DbName { get; private set; }
-        public string User { get; private set; }
-        public string Password { get; private set; }
+        public string Host { get; }
+        public ushort Port { get; }
+        public string DbName { get; }
+        public string User { get; }
+        public string Password { get; }
 
-        private void ValidateArguments(string host, string dbname, string user, string password)
+        private void ValidateArguments(string host, string dbname)
         {
             if ( host == null ) throw new ArgumentNullException(nameof(host), $"{nameof(host)} is null.");
             if ( dbname == null ) throw new ArgumentNullException(nameof(dbname), $"{nameof(dbname)} is null.");
-            if ( user == null ) throw new ArgumentNullException(nameof(user), $"{nameof(user)} is null.");
-            if ( password == null ) throw new ArgumentNullException(nameof(password), $"{nameof(password)} is null.");
 
             if ( host.Trim() == String.Empty ) throw new ArgumentException($"{nameof(host)} is empty.", nameof(host));
             if ( dbname.Trim() == String.Empty ) throw new ArgumentException($"{nameof(dbname)} is empty.", nameof(dbname));
-            if ( user.Trim() == String.Empty ) throw new ArgumentException($"{nameof(user)} is empty.", nameof(user));
-            if ( password.Trim() == String.Empty ) throw new ArgumentException($"{nameof(password)} is empty.", nameof(password));
+        }
+
+        public override string ToString()
+        {
+            var result = $"Server={Host};Database={DbName};";
+
+            if ( Port > 0 ) result += $"Port={Port};";
+
+            if ( User == null )
+                result += $"Integrated Security=true;";
+            else
+            {
+                result += $"User Id={User};";
+                if ( Password != null ) result += $"Password={Password};";
+            }
+
+            return result;
         }
     }
 }

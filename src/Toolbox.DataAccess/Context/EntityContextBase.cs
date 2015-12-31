@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using Microsoft.Extensions.OptionsModel;
 using Toolbox.DataAccess.Options;
 
 namespace Toolbox.DataAccess.Entiteiten
@@ -7,18 +8,12 @@ namespace Toolbox.DataAccess.Entiteiten
     {
         private readonly DataAccessOptions _dataAccessOptions;
 
-        public EntityContextBase(DataAccessOptions dataAccessOptions) : base(dataAccessOptions.ConnectionString.ToString())
+        public EntityContextBase(IOptions<EntityContextOptions> options) : base(options.Value.ConnectionString.ToString())
         {
-            _dataAccessOptions = dataAccessOptions;
-            this.Configuration.LazyLoadingEnabled = false;
+            EntityContextOptions = options.Value;
+            this.Configuration.LazyLoadingEnabled = EntityContextOptions.LazyLoadingEnabled;
         }
 
-        internal DataAccessOptions DataAccessOptions
-        {
-            get
-            {
-                return _dataAccessOptions;
-            }
-        }
+        internal EntityContextOptions EntityContextOptions { get; }
     }
 }

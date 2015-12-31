@@ -24,6 +24,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Toolbox.DataAccess.Postgres
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Toolbox.DataAccess.SqlServer", "src\Toolbox.DataAccess.SqlServer\Toolbox.DataAccess.SqlServer.xproj", "{E039D04D-B756-4FBA-9457-AC088FF26C4B}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Toolbox.DataAccess.Postgres.UnitTests", "test\Toolbox.DataAccess.Postgres.UnitTests\Toolbox.DataAccess.Postgres.UnitTests.xproj", "{CAA1649C-0E6B-446A-89A0-830B29A66D04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{E039D04D-B756-4FBA-9457-AC088FF26C4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E039D04D-B756-4FBA-9457-AC088FF26C4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E039D04D-B756-4FBA-9457-AC088FF26C4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA1649C-0E6B-446A-89A0-830B29A66D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA1649C-0E6B-446A-89A0-830B29A66D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA1649C-0E6B-446A-89A0-830B29A66D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA1649C-0E6B-446A-89A0-830B29A66D04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +61,6 @@ Global
 		{77C56B70-E4EC-4CE4-95B2-04BC6492D01F} = {263D749B-EEBE-4B2A-B79A-B162BAB68E24}
 		{129AF7AA-5EBF-43B7-AE5A-4A08D4FC916F} = {3D5D0B67-478E-4734-83F5-9D9F612E5661}
 		{E039D04D-B756-4FBA-9457-AC088FF26C4B} = {3D5D0B67-478E-4734-83F5-9D9F612E5661}
+		{CAA1649C-0E6B-446A-89A0-830B29A66D04} = {263D749B-EEBE-4B2A-B79A-B162BAB68E24}
 	EndGlobalSection
 EndGlobal

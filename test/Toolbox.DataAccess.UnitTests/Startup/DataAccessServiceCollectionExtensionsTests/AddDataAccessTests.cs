@@ -5,10 +5,30 @@ using Toolbox.DataAccess.Options;
 using Toolbox.DataAccess.StartupExtensions;
 using Xunit;
 
-namespace Toolbox.DataAccess.UnitTests.DataAccessServiceCollectionExtensionsTests
+namespace Toolbox.DataAccess.UnitTests.Startup.DataAccessServiceCollectionExtensionsTests
 {
     public class AddDataAccessTests
     {
+        //[Fact]
+        //private void DataAccessOptionsNullRaisesArgumentNullException()
+        //{
+        //    Action<DataAccessOptions> nullAction = null;
+        //    var serviceCollection = new ServiceCollection();
+        //    var ex = Assert.Throws<ArgumentNullException>(() => serviceCollection.AddDataAccess<EntityContextBase>(nullAction));
+        //    Assert.Equal("setupAction", ex.ParamName);
+        //}
+
+        //[Fact]
+        //private void DataAccessOptionsRegistersConnectionString()
+        //{
+        //    var connString = new ConnectionString("host", 1234, "dbname");
+
+        //    var serviceCollection = new ServiceCollection();
+        //    IServiceCollection collection = serviceCollection.AddDataAccess<EntityContextBase>(opt => opt.ConnectionString = connString);
+
+        //    //    var options = collection.BuildServiceProvider().GetService<DataAccessOptions>();
+        //}
+
         //[Fact]
         //private void JsonFilenameNullRaisesArgumentNullException()
         //{

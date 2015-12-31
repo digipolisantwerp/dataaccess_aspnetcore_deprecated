@@ -1,21 +1,14 @@
 ﻿{
-  "version": "1.0.0-*",
-  "description": "Toolbox.DataAccess.SqlServer Class Library",
-  "authors": [ "rc01790" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
-
-  "frameworks": {
-    "net451": { },
-    "dotnet5.4": {
-      "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
-      }
+    "version": "1.0.0-*",
+    "description": "SQL Server provider for the DataAccess Toolbox.",
+    "authors": [ "digipolis.be" ],
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": "",
+    "dependencies": {
+        "Toolbox.DataAccess": ""
+    },
+    "frameworks": {
+        "dnx451": { }
     }
-  }
 }
