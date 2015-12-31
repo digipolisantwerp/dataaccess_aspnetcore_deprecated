@@ -19,7 +19,11 @@ namespace Toolbox.DataAccess
             //services.AddInstance(options);
             //services.Configure<DataAccessOptions>(opt => opt.SetConnectionString(options.ConnectionString); );      // ToDo (SVB) : bovenstaande lijn vervangen en testen
 
+            services.Configure(setupAction);
+
             RegisterDataAccess<TEntityContext>(services);
+
+            // ToDo (SVB) : register postgres specific stuff
 
             return services;
         }
