@@ -5,12 +5,12 @@ namespace Toolbox.DataAccess.Postgres.Options
 {
     public class PostgresDataAccessOptions : ProviderDataAccessOptions
     {
-        public ConnectionString ConnectionString { get; private set; }
-
-        public void UsePostgres(ConnectionString connectionString)
+        public void UsePostgres(ConnectionString connectionString, DataAccessOptions dataAccessOptions = null)
         {
-            if ( connectionString == null ) throw new ArgumentNullException(nameof(connectionString), $"{nameof(connectionString)} cannot be null.");
-            ConnectionString = connectionString;
+            EntityContextOptionsBuilder.SetConnectionString(connectionString);
+
+            var options = dataAccessOptions == null ? new DataAccessOptions() : dataAccessOptions;
+            EntityContextOptionsBuilder.SetDataAccessOptions(options);
         }
     }
 }

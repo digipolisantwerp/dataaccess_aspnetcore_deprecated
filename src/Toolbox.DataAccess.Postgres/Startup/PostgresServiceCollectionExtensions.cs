@@ -16,8 +16,9 @@ namespace Toolbox.DataAccess
             if ( setupAction == null ) throw new ArgumentNullException(nameof(setupAction), $"{nameof(setupAction)} cannot be null.");
 
             // ToDo (SVB) : register options
-            //services.AddInstance(options);
-            //services.Configure<DataAccessOptions>(opt => opt.SetConnectionString(options.ConnectionString); );      // ToDo (SVB) : bovenstaande lijn vervangen en testen
+            //var options = new PostgresDataAccessOptions();
+            //setupAction.Invoke(options);
+            //services.Configure<EntityContextOptions>(opt => opt.ConnectionString = options.ConnectionString);      // ToDo (SVB) : bovenstaande lijn vervangen en testen
 
             services.Configure(setupAction);
 

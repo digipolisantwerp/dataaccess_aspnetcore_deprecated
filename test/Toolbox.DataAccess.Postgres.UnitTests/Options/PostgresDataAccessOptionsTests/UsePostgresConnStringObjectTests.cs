@@ -6,7 +6,7 @@ namespace Toolbox.DataAccess.Postgres.UnitTests.Options.PostgresDataAccessOption
 {
     public class UsePostgresConnStringObjectTests
     {
-        [Fact]  
+        [Fact]
         public void ConnectionStringNullRaisesArgumentNullException()
         {
             ConnectionString nullConnString = null;
@@ -15,17 +15,6 @@ namespace Toolbox.DataAccess.Postgres.UnitTests.Options.PostgresDataAccessOption
             var ex = Assert.Throws<ArgumentNullException>(() => options.UsePostgres(nullConnString));
 
             Assert.Equal("connectionString", ex.ParamName);
-        }
-
-        [Fact]
-        private void ConnectionStringIsSet()
-        {
-            var connString = new ConnectionString("host", 1234, "dbname");
-            var options = new PostgresDataAccessOptions();
-
-            options.UsePostgres(connString);
-
-            Assert.Same(connString, options.ConnectionString);
         }
     }
 }

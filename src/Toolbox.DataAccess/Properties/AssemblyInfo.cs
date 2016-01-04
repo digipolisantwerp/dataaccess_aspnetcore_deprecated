@@ -1,1 +1,1 @@
-﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Digipolis.DataAccess.UnitTests")]
+﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Toolbox.DataAccess.UnitTests")]

@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.OptionsModel;
 using Toolbox.DataAccess.Entiteiten;
+using Toolbox.DataAccess.Options;
 using Toolbox.DataAccess.Postgres.Options;
 using Toolbox.DataAccess.Repositories;
 using Toolbox.DataAccess.Uow;
@@ -69,7 +70,7 @@ namespace Toolbox.DataAccess.Postgres.UnitTests.Startup.PostgresServiceCollectio
         }
 
         [Fact]
-        private void PostgresDataAccessOptionsAreRegistered()
+        private void EntityContextOptionsAreRegistered()
         {
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
@@ -77,7 +78,7 @@ namespace Toolbox.DataAccess.Postgres.UnitTests.Startup.PostgresServiceCollectio
 
             services.AddDataAccess<EntityContextBase>(options => options.UsePostgres(connString));
 
-            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<PostgresDataAccessOptions>)).ToArray();
+            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<EntityContextOptions>)).ToArray();
             Assert.Equal(1, registrations.Count());
             Assert.Equal(ServiceLifetime.Transient, registrations[0].Lifetime);
         }
