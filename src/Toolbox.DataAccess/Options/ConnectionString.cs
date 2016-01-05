@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Toolbox.DataAccess
 {
     public class ConnectionString
     {
+        public ConnectionString() : this("localhost", 0, Assembly.GetCallingAssembly().GetName().Name)
+        { }
+
         public ConnectionString(string host, ushort port, string dbname, string user = null, string password = null)
         {
             ValidateArguments(host, dbname);
@@ -14,11 +18,11 @@ namespace Toolbox.DataAccess
             Password = password;
         }
 
-        public string Host { get; }
-        public ushort Port { get; }
-        public string DbName { get; }
-        public string User { get; }
-        public string Password { get; }
+        public string Host { get; set; }
+        public ushort Port { get; set; }
+        public string DbName { get; set; }
+        public string User { get; set; }
+        public string Password { get; set; }
 
         private void ValidateArguments(string host, string dbname)
         {

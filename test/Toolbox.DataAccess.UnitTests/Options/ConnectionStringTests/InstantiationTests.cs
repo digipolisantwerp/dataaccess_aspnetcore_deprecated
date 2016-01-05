@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Xunit;
 
 namespace Toolbox.DataAccess.UnitTests.Options.ConnectionStringTests
@@ -100,6 +101,41 @@ namespace Toolbox.DataAccess.UnitTests.Options.ConnectionStringTests
         private void PasswordNullIsAllowed()
         {
             var conn = new ConnectionString("host", 1234, "db", "user", null);
+            Assert.Null(conn.Password);
+        }
+
+        [Fact]
+        private void DefaultHostIsLocalhost()
+        {
+            var conn = new ConnectionString();
+            Assert.Equal("localhost", conn.Host);
+        }
+
+        [Fact]
+        private void DefaultPortIsZero()
+        {
+            var conn = new ConnectionString();
+            Assert.Equal(0, conn.Port);
+        }
+
+        [Fact]
+        private void DefaultDbNameIsCurrentAssembly()
+        {
+            var conn = new ConnectionString();
+            Assert.Equal(Assembly.GetExecutingAssembly().GetName().Name, conn.DbName);
+        }
+
+        [Fact]
+        private void DefaultUserIsNull()
+        {
+            var conn = new ConnectionString();
+            Assert.Null(conn.User);
+        }
+
+        [Fact]
+        private void DefaultPasswordIsNull()
+        {
+            var conn = new ConnectionString();
             Assert.Null(conn.Password);
         }
     }

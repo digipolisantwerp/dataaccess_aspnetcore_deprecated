@@ -1,84 +1,62 @@
-﻿//using System;
-//using Microsoft.Extensions.Configuration;
-//using Microsoft.Extensions.DependencyInjection;
-//using Microsoft.Extensions.DependencyInjection.Extensions;
-//using Toolbox.DataAccess.Options;
-//using Toolbox.DataAccess.Entiteiten;
-//using Toolbox.DataAccess.Uow;
-//using Toolbox.DataAccess.Repositories;
+﻿using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Toolbox.DataAccess.Context;
+using Toolbox.DataAccess.Uow;
+using Toolbox.DataAccess.Repositories;
+using Toolbox.DataAccess.Exceptions;
 
-//namespace Toolbox.DataAccess.StartupExtensions
-//{
-//    public static class DataAccessServiceCollectionExtentions
-//    {
-//        public static IServiceCollection AddDataAccess<TEntityContext>(this IServiceCollection services, Action<DataAccessOptions> setupAction) where TEntityContext : EntityContextBase
-//        {
-//            if ( setupAction == null ) throw new ArgumentNullException(nameof(setupAction), $"{nameof(setupAction)} cannot be null.");
+namespace Toolbox.DataAccess
+{
+    public static class DataAccessServiceCollectionExtentions
+    {
+        public static IServiceCollection AddDataAccess<TEntityContext>(this IServiceCollection services, Action<DataAccessOptions> setupAction) where TEntityContext : EntityContextBase
+        {
+            if ( setupAction == null ) throw new ArgumentNullException(nameof(setupAction), $"{nameof(setupAction)} cannot be null.");
 
-//            // ToDo (SVB) : register options
-//            //services.AddInstance(options);
-//            //services.Configure<EntityContextOptions>(opt => opt.ConnectionString =  );      // ToDo (SVB) : bovenstaande lijn vervangen en testen
+            services.Configure(setupAction);
 
-//            services.Configure(setupAction);
+            RegisterDataAccess<TEntityContext>(services);
 
-//            RegisterDataAccess<TEntityContext>(services);
+            return services;
+        }
 
-//            return services;
-//        }
+        public static IServiceCollection AddDataAccess<TEntityContext>(this IServiceCollection services, Action<DataAccessJsonFile> setupAction) where TEntityContext : EntityContextBase
+        {
+            if ( setupAction == null ) throw new ArgumentNullException(nameof(setupAction), $"{nameof(setupAction)} cannot be null.");
 
-//        private static void RegisterDataAccess<TEntityContext>(IServiceCollection services) where TEntityContext : EntityContextBase
-//        {
-//            services.TryAddTransient<IUowProvider, UowProvider>();
-//            services.TryAddTransient<EntityContextBase, TEntityContext>();
-//            services.TryAddTransient(typeof(IRepository<>), typeof(GenericEntityRepository<>));
-//        }
+            var options = new DataAccessJsonFile();
+            setupAction.Invoke(options);
 
-////        public static IServiceCollection AddDataAccess<TEntityContext>(this IServiceCollection services, Action<DataAccessOptions> setupAction) where TEntityContext : EntityContextBase
-////        {
-////            if ( setupAction == null ) throw new ArgumentNullException(nameof(setupAction), $"{nameof(setupAction)} is null.");
+            ValidateMandatoryField(options.FileName, nameof(options.FileName));
+            ValidateMandatoryField(options.Section, nameof(options.Section));
 
-////            //RegisterDataAccess<TEntityContext>(services, options);
+            ConfigureOptions(services, options);
+            RegisterDataAccess<TEntityContext>(services);
 
-////            return services;
-////        }
+            return services;
+        }
 
-////        public static IServiceCollection AddDataAccess<TEntityContext>(this IServiceCollection services, DataAccessOptions options) where TEntityContext : EntityContextBase
-////        {
-////            if ( options == null ) throw new ArgumentNullException(nameof(options), $"{nameof(options)} is null.");
+        private static void ConfigureOptions(IServiceCollection services, DataAccessJsonFile options)
+        {
+            var builder = new ConfigurationBuilder().AddJsonFile(options.FileName);
+            var config = builder.Build();
+            var section = config.GetSection(options.Section);
+            services.Configure<DataAccessOptions>(section);
+        }
 
-////            RegisterDataAccess<TEntityContext>(services, options);
+        private static void RegisterDataAccess<TEntityContext>(IServiceCollection services) where TEntityContext : EntityContextBase
+        {
+            services.TryAddTransient<IUowProvider, UowProvider>();
+            services.TryAddTransient<EntityContextBase, TEntityContext>();
+            services.TryAddTransient(typeof(IRepository<>), typeof(GenericEntityRepository<>));
+        }
 
-////            return services;
-////        }
-
-////        public static IServiceCollection AddDataAccess<TEntityContext>(this IServiceCollection services, string optionsFilePath) where TEntityContext : EntityContextBase
-////        {
-////            if ( optionsFilePath == null ) throw new ArgumentNullException(nameof(optionsFilePath), $"{nameof(optionsFilePath)} is null.");
-
-////            var connectionString = ReadConnectionString(optionsFilePath);
-////            var dataAccessOptions = new DataAccessOptions(connectionString);
-
-////            AddDataAccess<TEntityContext>(services, dataAccessOptions);
-
-////            return services;
-////        }
-
-////        private static ConnectionString ReadConnectionString(string jsonFilename)
-////        {
-////            var builder = new ConfigurationBuilder();
-////            builder.AddJsonFile(jsonFilename);
-////            var config = builder.Build();
-
-////            //var host = config.Get(ConfigKeys.ConnectionString.Host);
-////            //var port = config.Get(ConfigKeys.ConnectionString.Port);
-////            //var dbname = config.Get(ConfigKeys.ConnectionString.DbName);
-////            //var user = config.Get(ConfigKeys.ConnectionString.User);
-////            //var pwd = config.Get(ConfigKeys.ConnectionString.Password);
-
-////            //return new ConnectionString(host, port, dbname, user, pwd);
-
-////            return null;
-////        }
-
-//    }
-//}
+        private static void ValidateMandatoryField(string field, string fieldName)
+        {
+            if ( field == null ) throw new ArgumentNullException(fieldName, $"{fieldName} cannot be null.");
+            if ( field.Trim() == String.Empty ) throw new ArgumentException($"{fieldName} cannot be empty.", fieldName);
+        }
+    }
+}

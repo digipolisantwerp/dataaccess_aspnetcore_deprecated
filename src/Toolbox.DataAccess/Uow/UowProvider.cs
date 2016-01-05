@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
-using Toolbox.DataAccess.Entiteiten;
+using Toolbox.DataAccess.Context;
 
 namespace Toolbox.DataAccess.Uow
 {

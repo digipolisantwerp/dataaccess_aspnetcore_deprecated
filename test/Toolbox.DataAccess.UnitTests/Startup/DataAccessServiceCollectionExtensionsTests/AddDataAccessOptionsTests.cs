@@ -2,21 +2,19 @@
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.OptionsModel;
-using Toolbox.DataAccess.Entiteiten;
-using Toolbox.DataAccess.Options;
-using Toolbox.DataAccess.Postgres.Options;
+using Toolbox.DataAccess.Context;
 using Toolbox.DataAccess.Repositories;
 using Toolbox.DataAccess.Uow;
 using Xunit;
 
-namespace Toolbox.DataAccess.Postgres.UnitTests.Startup.PostgresServiceCollectionExtensionsTests
+namespace Toolbox.DataAccess.UnitTests.Startup.DataAccessServiceCollectionExtensionsTests
 {
-    public class AddDataAccessTests
+    public class AddDataAccessOptionsTests
     {
         [Fact]
-        private void PostgresDataAccessOptionsActionNullRaisesArgumentException()
+        private void ActionNullRaisesArgumentException()
         {
-            Action<PostgresDataAccessOptions> nullAction = null;
+            Action<DataAccessOptions> nullAction = null;
             var services = new ServiceCollection();
 
             var ex = Assert.Throws<ArgumentNullException>(() => services.AddDataAccess<EntityContextBase>(nullAction));
@@ -30,7 +28,7 @@ namespace Toolbox.DataAccess.Postgres.UnitTests.Startup.PostgresServiceCollectio
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
 
-            services.AddDataAccess<EntityContextBase>(options => options.UsePostgres(connString));
+            services.AddDataAccess<EntityContextBase>(opt => opt.ConnectionString = connString);
 
             var registrations = services.Where(sd => sd.ServiceType == typeof(IUowProvider)
                                                && sd.ImplementationType == typeof(UowProvider))
@@ -45,7 +43,7 @@ namespace Toolbox.DataAccess.Postgres.UnitTests.Startup.PostgresServiceCollectio
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
 
-            services.AddDataAccess<EntityContextBase>(options => options.UsePostgres(connString));
+            services.AddDataAccess<EntityContextBase>(opt => opt.ConnectionString = connString);
 
             var registrations = services.Where(sd => sd.ServiceType == typeof(EntityContextBase)
                                                && sd.ImplementationType == typeof(EntityContextBase))
@@ -60,7 +58,7 @@ namespace Toolbox.DataAccess.Postgres.UnitTests.Startup.PostgresServiceCollectio
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
 
-            services.AddDataAccess<EntityContextBase>(options => options.UsePostgres(connString));
+            services.AddDataAccess<EntityContextBase>(opt => opt.ConnectionString = connString);
 
             var registrations = services.Where(sd => sd.ServiceType == typeof(IRepository<>)
                                                && sd.ImplementationType == typeof(GenericEntityRepository<>))
@@ -70,17 +68,28 @@ namespace Toolbox.DataAccess.Postgres.UnitTests.Startup.PostgresServiceCollectio
         }
 
         [Fact]
-        private void EntityContextOptionsAreRegistered()
+        private void DataAccessOptionsAreRegisteredAsSingleton()
         {
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
-            services.AddOptions();
 
-            services.AddDataAccess<EntityContextBase>(options => options.UsePostgres(connString));
+            services.AddDataAccess<EntityContextBase>(opt => 
+                                                        {
+                                                            opt.ConnectionString = connString;
+                                                            opt.LazyLoadingEnabled = true;
+                                                        } );
 
-            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<EntityContextOptions>)).ToArray();
+            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<DataAccessOptions>)).ToArray();
             Assert.Equal(1, registrations.Count());
-            Assert.Equal(ServiceLifetime.Transient, registrations[0].Lifetime);
+            Assert.Equal(ServiceLifetime.Singleton, registrations[0].Lifetime);
+
+            var configOptions = registrations[0].ImplementationInstance as IConfigureOptions<DataAccessOptions>;
+            Assert.NotNull(configOptions);
+
+            var options = new DataAccessOptions();
+            configOptions.Configure(options);
+            Assert.Same(connString, options.ConnectionString);
+            Assert.True(options.LazyLoadingEnabled);
         }
     }
 }
