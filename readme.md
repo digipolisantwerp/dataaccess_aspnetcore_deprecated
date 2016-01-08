@@ -1,6 +1,6 @@
 # DataAccess Toolbox
 
-The DataAccess Toolbox contains the base classes for data access in ASP.NET 5 with Entity Framework using the unit-of-work and repository pattern.
+The DataAccess Toolbox contains the base classes for data access in ASP.NET 5 with Entity Framework 6.1 using the unit-of-work and repository pattern.
 
 It contains :
 - base classes for entities.
@@ -16,12 +16,10 @@ It contains :
 
 
 - [Installation](#installation)
-- [Configuration in Startup](#configuration-in-startup)
-  - [ConfigureServices](#configureservices)
-    - [Path to json config file](#path-to-json-config-file)
-    - [DataAccessOptions](#dataaccessoptions)
-  - [Configure](#configure)
-- [](#)
+- [Configuration in Startup.ConfigureServices](#configuration-in-startupconfigureservices)
+  - [Json config file](#json-config-file)
+  - [Code](#code)
+  - [NpgSql](#npgsql)
 - [EntityContext](#entitycontext)
 - [Entities](#entities)
 - [Gebruik](#gebruik)
@@ -46,74 +44,97 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 Alternatively, it can also be added via the NuGet Package Manager interface.
 
-## Configuration in Startup
-
-### ConfigureServices
+## Configuration in Startup.ConfigureServices
 
 The DataAccess framework is registered in the _*ConfigureServices*_ method of the *Startup* class.
 
 There are 2 ways to configure the DataAccess framework :
-- by passing a path to a json config file to the AddDataAccess method
-- by passing a DataAccessOptions instance to the AddDataAccess method
+- using a json config file
+- using code
 
-#### Path to json config file 
+### Json config file 
 
-The DataAccess framework will read the json file and create a DataAccessOptions instance.
+The path to the Json config file has to be given as argument to the _*AddDataAccess*_ method, together with the concrete type of your DbContect as generic parameter :
 
 ``` csharp
-services.AddDataAccess<MyEntityContext>("path-to-config.json");
+services.AddDataAccess<MyEntityContext>(opt => opt.FileName = "configs/dbconfig./json");
+
 ```
 
-The concrete type of your DbContext has to be passed as generic parameter to the AddDataAccess method.
+If the DataAccess section in your json file is not named 'DataAccess' (=default), also pass in your custom section name :
 
-The config file has to contain the following section :
+``` csharp
+services.AddDataAccess<MyEntityContext>(opt => 
+                                        { 
+                                            opt.FileName = "configs/dbconfig./json"; 
+                                            opt.SectionName = "MyDataAccessSection"; 
+                                        });
+```
+
+The DataAccess framework will read the given section of the json file with the following structure :
 
 ``` json
 {
-	"ConnectionString": {
-		"Host": "localhost",
-		"Port": "1234",
-		"DbName": "dbname",
-		"User": "user",
-		"Password":  "pwd"
-	}
+    "DataAccess": {
+        "ConnectionString": {
+            "Host": "localhost",
+            "Port": "1234",
+            "DbName": "dbname",
+            "User": "user",
+            "Password":  "pwd"
+        },
+        "LazyLoadingEnabled": false
+    }
 }
 ```
-Port is optional, it can be omitted. If it is included it must contain a valid port number (numeric value from 0 to 65535).
+Port is optional. If it is included it must contain a valid port number (numeric value from 0 to 65535).
 
-#### DataAccessOptions
+### Code
 
-You can also instantiate and populate a DataAccessOptions object yourself and pass it directly to the AddDataAccess method.
+You can also call the _*AddDataAccess*_ method, passing in the needed options directly : 
 
 ``` csharp
 var connString = new ConnectionString("host", 1234, "dbname", "user", "pwd");
-var dataAccessOptions = new DataAccessOptions(connString);
-services.AddDataAccess<MyEntityContext>(dataAccessOptions);
+services.AddDataAccess<MyEntityContext>(opt => opt.ConnectionString = connString);
 ```
 
 When you don't need to specify a port in the connection string, pass 0 to it.  
 
-### Configure
+### NpgSql
 
-The _*Configure*_ method of the *Startup* class, initiates the DataAccess framework :
+If you use NpgSql, you must also pass in a DbConfiguration object that contains the Npgsql configuration :
 
-``` csharp
-    app.UseDataAccess();
-```
-
----------------------
-
-De PostgresDbConfiguration class
-``` csharp
-    public class PostgresDbConfiguration : DbConfiguration
+``` csharp 
+public class PostgresDbConfiguration : DbConfiguration
+{
+    public PostgresDbConfiguration()
     {
-        public PostgresDbConfiguration()
-        {
-            SetDefaultConnectionFactory(new Npgsql.NpgsqlConnectionFactory());
-            SetProviderFactory("Npgsql", Npgsql.NpgsqlFactory.Instance);
-            SetProviderServices("Npgsql", Npgsql.NpgsqlServices.Instance);
-        }
+        SetDefaultConnectionFactory( new Npgsql. NpgsqlConnectionFactory());
+        SetProviderFactory( "Npgsql", Npgsql.NpgsqlFactory .Instance);
+        SetProviderServices( "Npgsql", Npgsql.NpgsqlServices .Instance);
     }
+}
+``` 
+
+Startup.ConfigureServices : 
+
+``` csharp 
+var dbConfig = new PostgresDbConfiguration();
+
+var connString = new ConnectionString("host", 1234, "dbname", "user", "pwd");
+services.AddDataAccess<MyEntityContext>(opt => 
+                                        { 
+                                            opt.ConnectionString = connString; 
+                                            opt.DbConfiguration = dbConfig;
+                                        });
+
+// or
+
+services.AddDataAccess<MyEntityContext>(opt => 
+                                        { 
+                                            opt.FileName = "configs/dbconfig./json"; 
+                                            opt.DbConfiguration = dbConfig; 
+                                        });
 ```
 
 ## EntityContext

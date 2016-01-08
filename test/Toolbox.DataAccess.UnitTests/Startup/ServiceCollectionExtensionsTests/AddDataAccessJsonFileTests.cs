@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.OptionsModel;
 using Toolbox.DataAccess.Context;
+using Toolbox.DataAccess.Options;
 using Toolbox.DataAccess.Repositories;
 using Toolbox.DataAccess.Uow;
 using Xunit;
 
-namespace Toolbox.DataAccess.UnitTests.Startup.DataAccessServiceCollectionExtensionsTests
+namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
 {
-    public class AddDataAccessFileNameTests
+    public class AddDataAccessJsonFileTests
     {
         [Fact]
         private void ActionNullRaisesArgumentException()
@@ -24,7 +26,7 @@ namespace Toolbox.DataAccess.UnitTests.Startup.DataAccessServiceCollectionExtens
         }
 
         [Fact]
-        private void UowProviderIsRegisteredAsTransient()
+        private void UowProviderIsRegisteredAsSingleton()
         {
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
@@ -35,7 +37,7 @@ namespace Toolbox.DataAccess.UnitTests.Startup.DataAccessServiceCollectionExtens
                                                && sd.ImplementationType == typeof(UowProvider))
                                         .ToArray();
             Assert.Equal(1, registrations.Count());
-            Assert.Equal(ServiceLifetime.Transient, registrations[0].Lifetime);
+            Assert.Equal(ServiceLifetime.Singleton, registrations[0].Lifetime);
         }
 
         [Fact]
@@ -131,7 +133,7 @@ namespace Toolbox.DataAccess.UnitTests.Startup.DataAccessServiceCollectionExtens
         }
 
         [Fact]
-        private void DataAccessOptionsAreRegisteredAsSingleton()
+        private void EntityContextOptionsAreRegisteredAsSingleton()
         {
             var services = new ServiceCollection();
 
@@ -141,14 +143,14 @@ namespace Toolbox.DataAccess.UnitTests.Startup.DataAccessServiceCollectionExtens
                                                             opt.Section = "DataAccess";
                                                         });
 
-            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<DataAccessOptions>)).ToArray();
+            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<EntityContextOptions>)).ToArray();
             Assert.Equal(1, registrations.Count());
             Assert.Equal(ServiceLifetime.Singleton, registrations[0].Lifetime);
 
-            var configOptions = registrations[0].ImplementationInstance as IConfigureOptions<DataAccessOptions>;
+            var configOptions = registrations[0].ImplementationInstance as IConfigureOptions<EntityContextOptions>;
             Assert.NotNull(configOptions);
 
-            var options = new DataAccessOptions();
+            var options = new EntityContextOptions();
             configOptions.Configure(options);
             Assert.NotNull(options.ConnectionString);
             Assert.Equal("testhost", options.ConnectionString.Host);
@@ -157,6 +159,27 @@ namespace Toolbox.DataAccess.UnitTests.Startup.DataAccessServiceCollectionExtens
             Assert.Equal("testuser", options.ConnectionString.User);
             Assert.Equal("testpwd", options.ConnectionString.Password);
             Assert.True(options.LazyLoadingEnabled);
+        }
+
+        [Fact]
+        private void DbConfigurationIsSet()
+        {
+            var connString = new ConnectionString("host", 123, "dbname");
+            var dbConfig = new TestDbConfiguration();
+            var services = new ServiceCollection();
+
+            TestDbConfiguration registeredDbConfig = null;
+
+            DbConfiguration.Loaded += (sender, e) => registeredDbConfig = sender as TestDbConfiguration; 
+
+            services.AddDataAccess<EntityContextBase>(opt =>
+                                                        {
+                                                            opt.FileName = "_TestData/dbconfig.json";
+                                                            opt.Section = "DataAccess";
+                                                            opt.DbConfiguration = dbConfig;
+                                                        });
+
+            Assert.NotNull(registeredDbConfig);
         }
     }
 }

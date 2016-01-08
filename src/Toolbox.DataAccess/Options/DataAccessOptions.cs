@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Data.Entity;
+using Toolbox.DataAccess.Options;
 
 namespace Toolbox.DataAccess
 {
-    public class DataAccessOptions 
+    public class DataAccessOptions : EntityContextOptions
     {
-        public ConnectionString ConnectionString { get; set; } = new ConnectionString();
-
-        public bool LazyLoadingEnabled { get; set; } = false;
+        public DbConfiguration DbConfiguration { get; set; }
     }
 }

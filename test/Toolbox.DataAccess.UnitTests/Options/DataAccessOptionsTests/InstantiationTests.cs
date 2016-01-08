@@ -13,10 +13,17 @@ namespace Toolbox.DataAccess.UnitTests.Options.DataAccessOptionsTests
         }
 
         [Fact]
-        private void LazyLoadingEnabledIsDefaultedToFalse()
+        private void DefaultLazyLoadingEnabledIsFalse()
         {
             var options = new DataAccessOptions();
             Assert.False(options.LazyLoadingEnabled);
+        }
+
+        [Fact]
+        private void DefaultDbConfigurationIsNull()
+        {
+            var options = new DataAccessOptions();
+            Assert.Null(options.DbConfiguration);
         }
     }
 }

@@ -32,5 +32,12 @@ namespace Toolbox.DataAccess.UnitTests.Options.DataAccessJsonFileTests
             var options = new DataAccessJsonFile();
             Assert.Equal("dbconfig.json", options.FileName);
         }
+
+        [Fact]
+        private void DefaultDbConfigurationIsNull()
+        {
+            var options = new DataAccessJsonFile();
+            Assert.Null(options.DbConfiguration);
+        }
     }
 } 

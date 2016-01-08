@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 
 namespace Toolbox.DataAccess
 {
@@ -15,5 +16,7 @@ namespace Toolbox.DataAccess
 
         public string FileName { get; set; }
         public string Section { get; set; }
+
+        public DbConfiguration DbConfiguration { get; set; }
     }
 }
