@@ -6,6 +6,6 @@ namespace Toolbox.DataAccess.Options
     {
         public ConnectionString ConnectionString { get; set; } = new ConnectionString();
 
-        public bool LazyLoadingEnabled { get; set; } = false;
+        public bool LazyLoadingEnabled { get; set; } = Defaults.EntityContextOptions.LazyLoadingEnabled;
     }
 }

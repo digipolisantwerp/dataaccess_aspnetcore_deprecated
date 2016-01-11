@@ -1,4 +1,5 @@
 ﻿using System;
+using Toolbox.DataAccess.Options;
 using Xunit;
 
 namespace Toolbox.DataAccess.UnitTests.Options.DataAccessOptionsTests
@@ -13,10 +14,10 @@ namespace Toolbox.DataAccess.UnitTests.Options.DataAccessOptionsTests
         }
 
         [Fact]
-        private void DefaultLazyLoadingEnabledIsFalse()
+        private void DefaultLazyLoadingEnabledIsSet()
         {
             var options = new DataAccessOptions();
-            Assert.False(options.LazyLoadingEnabled);
+            Assert.Equal(Defaults.EntityContextOptions.LazyLoadingEnabled, options.LazyLoadingEnabled);
         }
 
         [Fact]

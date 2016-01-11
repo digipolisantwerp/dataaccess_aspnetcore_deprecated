@@ -27,24 +27,30 @@ namespace Toolbox.DataAccess.Query
             Type typeQueryable = typeof(IQueryable<TEntity>);
             ParameterExpression argQueryable = System.Linq.Expressions.Expression.Parameter(typeQueryable, "p");
             var outerExpression = System.Linq.Expressions.Expression.Lambda(argQueryable, argQueryable);
-            string[] props = columnName.Split('.');
+            
             IQueryable<TEntity> query = new List<TEntity>().AsQueryable<TEntity>();
-            Type type = typeof(TEntity);
-            ParameterExpression arg = System.Linq.Expressions.Expression.Parameter(type, "x");
+            var entityType = typeof(TEntity);
+            ParameterExpression arg = System.Linq.Expressions.Expression.Parameter(entityType, "x");
 
-            Expression expr = arg;
-            foreach (string prop in props)
+            Expression expression = arg;
+            string[] properties = columnName.Split('.');
+            foreach (string propertyName in properties)
             {
-                PropertyInfo pi = type.GetProperty(prop, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-                expr = System.Linq.Expressions.Expression.Property(expr, pi);
-                type = pi.PropertyType;
+                PropertyInfo propertyInfo = entityType.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+                expression = System.Linq.Expressions.Expression.Property(expression, propertyInfo);
+                entityType = propertyInfo.PropertyType;
             }
-            LambdaExpression lambda = System.Linq.Expressions.Expression.Lambda(expr, arg);
+            LambdaExpression lambda = System.Linq.Expressions.Expression.Lambda(expression, arg);
             string methodName = reverse ? "OrderByDescending" : "OrderBy";
 
-            MethodCallExpression resultExp =
-                System.Linq.Expressions.Expression.Call(typeof(Queryable), methodName, new Type[] { typeof(TEntity), type }, outerExpression.Body, System.Linq.Expressions.Expression.Quote(lambda));
+            MethodCallExpression resultExp = System.Linq.Expressions.Expression.Call(typeof(Queryable), 
+                                                                                     methodName, 
+                                                                                     new Type[] { typeof(TEntity), entityType }, 
+                                                                                     outerExpression.Body, 
+                                                                                     System.Linq.Expressions.Expression.Quote(lambda));
+
             var finalLambda = System.Linq.Expressions.Expression.Lambda(resultExp, argQueryable);
+
             return (Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>)finalLambda.Compile();
         }
     }

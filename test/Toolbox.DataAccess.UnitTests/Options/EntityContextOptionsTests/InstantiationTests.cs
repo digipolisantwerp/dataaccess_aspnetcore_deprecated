@@ -14,10 +14,10 @@ namespace Toolbox.DataAccess.UnitTests.Options.EntityContextOptionsTests
         }
 
         [Fact]
-        private void LazyLoadingEnabledIsDefaultedToFalse()
+        private void DefaultLazyLoadingEnabledIsSet()
         {
             var options = new EntityContextOptions();
-            Assert.False(options.LazyLoadingEnabled);
+            Assert.Equal(Defaults.EntityContextOptions.LazyLoadingEnabled, options.LazyLoadingEnabled);
         }
     }
 }

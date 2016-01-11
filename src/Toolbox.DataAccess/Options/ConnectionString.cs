@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Reflection;
+using Toolbox.DataAccess.Options;
 
 namespace Toolbox.DataAccess
 {
     public class ConnectionString
     {
-        public ConnectionString() : this("localhost", 0, Assembly.GetCallingAssembly().GetName().Name)
+        public ConnectionString() : this(Defaults.ConnectionString.Host, Defaults.ConnectionString.Port, Assembly.GetCallingAssembly().GetName().Name)
         { }
 
         public ConnectionString(string host, ushort port, string dbname, string user = null, string password = null)

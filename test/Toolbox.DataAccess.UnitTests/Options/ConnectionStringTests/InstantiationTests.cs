@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Toolbox.DataAccess.Options;
 using Xunit;
 
 namespace Toolbox.DataAccess.UnitTests.Options.ConnectionStringTests
@@ -108,14 +109,14 @@ namespace Toolbox.DataAccess.UnitTests.Options.ConnectionStringTests
         private void DefaultHostIsLocalhost()
         {
             var conn = new ConnectionString();
-            Assert.Equal("localhost", conn.Host);
+            Assert.Equal(Defaults.ConnectionString.Host, conn.Host);
         }
 
         [Fact]
         private void DefaultPortIsZero()
         {
             var conn = new ConnectionString();
-            Assert.Equal(0, conn.Port);
+            Assert.Equal(Defaults.ConnectionString.Port, conn.Port);
         }
 
         [Fact]

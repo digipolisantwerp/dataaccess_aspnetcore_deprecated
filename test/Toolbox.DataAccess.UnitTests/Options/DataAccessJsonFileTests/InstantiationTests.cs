@@ -1,4 +1,5 @@
 ﻿using System;
+using Toolbox.DataAccess.Options;
 using Xunit;
 
 namespace Toolbox.DataAccess.UnitTests.Options.DataAccessJsonFileTests
@@ -20,17 +21,17 @@ namespace Toolbox.DataAccess.UnitTests.Options.DataAccessJsonFileTests
         }
 
         [Fact]
-        private void DefaultSectionIsDataAccess()
+        private void DefaultSectionIsSet()
         {
             var options = new DataAccessJsonFile();
-            Assert.Equal("DataAccess", options.Section);
+            Assert.Equal(Defaults.DataAccessJsonFile.Section, options.Section);
         }
 
         [Fact]
-        private void DefaultFileNameIsDbConfig()
+        private void DefaultFileNameIsSet()
         {
             var options = new DataAccessJsonFile();
-            Assert.Equal("dbconfig.json", options.FileName);
+            Assert.Equal(Defaults.DataAccessJsonFile.FileName, options.FileName);
         }
 
         [Fact]

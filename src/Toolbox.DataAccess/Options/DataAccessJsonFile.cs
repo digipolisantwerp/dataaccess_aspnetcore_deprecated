@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Data.Entity;
+using Toolbox.DataAccess.Options;
 
 namespace Toolbox.DataAccess
 {
     public class DataAccessJsonFile
     {
-        public DataAccessJsonFile() : this("dbconfig.json", "DataAccess")
+        public DataAccessJsonFile() : this(Defaults.DataAccessJsonFile.FileName, Defaults.DataAccessJsonFile.Section)
         { }
 
         public DataAccessJsonFile(string fileName, string section)
