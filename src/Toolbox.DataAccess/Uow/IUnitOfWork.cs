@@ -1,6 +1,7 @@
-﻿using Toolbox.DataAccess.Uow;
+﻿using System;
+using Toolbox.DataAccess.Uow;
 
-namespace Toolbox.DataAccess.Uow
+namespace Toolbox.DataAccess
 {
     public interface IUnitOfWork : IUnitOfWorkBase
     { }

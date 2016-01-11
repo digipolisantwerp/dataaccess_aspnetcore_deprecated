@@ -1,4 +1,4 @@
-﻿namespace Toolbox.DataAccess.Uow
+﻿namespace Toolbox.DataAccess
 {
     public interface IUowProvider
     {
