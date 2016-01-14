@@ -116,7 +116,7 @@ public class PostgresDbConfiguration : DbConfiguration
 }
 ``` 
 
-Startup.ConfigureServices : 
+In Startup.ConfigureServices : 
 
 ``` csharp 
 var dbConfig = new PostgresDbConfiguration();
@@ -128,7 +128,7 @@ services.AddDataAccess<MyEntityContext>(opt =>
                                             opt.DbConfiguration = dbConfig;
                                         });
 
-// or
+// or when using a config file
 
 services.AddDataAccess<MyEntityContext>(opt => 
                                         { 
@@ -139,133 +139,169 @@ services.AddDataAccess<MyEntityContext>(opt =>
 
 ## EntityContext
 
-Geef een EntityContext mee die overerft van Digipolis.DataAccess.Entiteiten.EntityContextBase. Deze Context dient DBSet properties van alle entiteiten te bevatten en kan aangevuld worden met 
-eventuele startup instructies. Een constructor die een DataAccessOptions object injecteert is vereist, de DataAccessOptions dienen doorgegeven te worden aan de EntityContextBase.
-Een voorbeeld van een EntityContext:
+You inherit a DbContect object from the EntityContextBase class in the toolbox. This context contains all your project-specific DbSets and custom logic.   
+The constructor has to accept an IOptions&lt;EntityContextOptions&gt; as input parameter, to be passed to the base constructor. This EntityContextOptions object is constructed from the DataAccess options, configured in the Startup class (see higher).
+
+For example :  
 
 ``` csharp
     public class EntityContext : EntityContextBase
     {
-        public EntityContext(DataAccessOptions dataAccessOptions) 
-            : base(dataAccessOptions)
-        {
-            _dataAccessOptions = dataAccessOptions;
-            this.Configuration.LazyLoadingEnabled = false;
-        }
+        public EntityContext(IOptions<EntityContextOptions> options) : base(options)
+        { }
 
-        public DbSet<Reservatie> Reservaties { get; set; }
-        public DbSet<Evenement> Evenementen { get; set; }
-        public DbSet<Locatie> Locaties { get; set; }
+        public DbSet<MyEntity> MyEntities { get; set; }
+        public DbSet<MyOtherEntity> MyOtherEntities { get; set; }
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
-			...  Zie documentatie entity framework
+			// optional, see Entity Framework documentation
 		}
-
-
 	}
 ```
 
 ## Entities
 
-Entities dienen over te erven van Digipolis.DataAcces.EntityBase en geregistreerd te worden in de EntityContext (zie voorbeeld hierboven). EntityBase bevat een int Id met Key attribuut. Is vereist om te kunnen gebruiken in onder andere IRepository.
-
-## Gebruik
-
-Voorbeelden van gebruik
-
-### Get
+Your Entities are inherited from the base class EntityBase in the toolbox :  
 
 ``` csharp
-    public virtual async Task<Afwezigheid> GetAsync(int id, IncludeList<Afwezigheid> includes)
-        {
-            using (var uow = _uowProvider.CreateUnitOfWork(false))
-            {
-                var repository = uow.GetRepository<IRepository<Afwezigheid>>();
-                return await repository.GetAsync(id, includes: includes);
-            }
-        }
+public class MyEntity : EntityBase
+{
+    public string MyProperty { get; set; }    
+}
 ```
 
-Voorbeeld van een IncludeList die voor de Afwezigheid entiteit ook Deelnmer en SoortAfwezigheid volledig gaat ophalen:
-``` csharp
-   var includeList = new IncludeList<Afwezigheid>(a => a.Deelnemer, a => a.SoortAfwezigheid);
+The EntityBase class already contains an int property, named Id.    
+
+## UnitOfWork  
+
+The toolbox contains a UnitOfWork class and IUnitofWork interface that encapsulates the DbContext and that you use in your business classes to separate the data access code from business code.  
+The IUnitOfWork is instantiated by the IUowProvider.  
+
+First inject the IUowProvider in your business class :  
+
+``` csharp  
+public class BusinessClass
+{
+   public BusinessClass(IUowProvider uowProvider)
+   {
+       _uowProvider = uowProvider;
+   }
+   
+   private readonly IUowProvider _uowProvider; 
+}
 ```
+ 
+ Then ask the IUowProvider for a IUnitOfWork :  
+ 
+ ``` csharp  
+ using ( var uow = _uowProvider.CreateUnitOfWork() )
+ {
+    // your business logica that needs dataaccess comes here   
+ }
+ ```  
+ 
+ You can pass in false if you don't want the change tracking to activate (better performance when you only want to retrieve data and not insert/update/delete).  
+ 
+ Now Access your data via repositories :    
+ 
+ ``` csharp  
+ var repository = uow.GetRepository<MyEntity>();
+ // your data access code via the repository comes here
+```  
 
+The UnitOfWork will be automatically injected in the repository and use it to interact with the database.  
 
-### GetAll
-``` csharp
-    public async Task<IEnumerable<Afwezigheid>> GetAllAsync(IncludeList<Afwezigheid> includes)
-        {
-            using (var uow = _uowProvider.CreateUnitOfWork(false))
-            {
-                var repository = uow.GetRepository<IRepository<Afwezigheid>>();
-                return await repository.GetAllAsync(includes: includes);
-            }
-        }
-```
+When you want to submit changes to the database, call the SaveChanges or SaveChangesAsync method of the IUnitOfWork :  
 
+``` csharp  
+uow.SaveChanges();
+```  
 
-### Insert
-``` csharp
-    public async Task InsertAsync(Deelnemer nieuweDeelnemer)
-        {
-            using (var uow = _uowProvider.CreateUnitOfWork())
-            {
-                var repository = uow.GetRepository<IRepository<Deelnemer>>();
-                repository.Add(nieuweDeelnemer);
-                await uow.SaveChangesAsync();
-            }
-        }
-```
+## Repositories
 
+The toolbox registers generic repositories in the ASP.NET 5 DI container. They provide the following methods :    
 
-### Update
-``` csharp
-    public async Task UpdateAsync(Deelnemer nieuweDeelnemer)
-        {
-            using (var uow = _uowProvider.CreateUnitOfWork())
-            {
-                var repository = uow.GetRepository<IRepository<Deelnemer>>();
-                repository.Update(nieuweDeelnemer);
-                await uow.SaveChangesAsync();
-            }
-        }
-```
+### Get / GetAsync  
 
-
-### Delete
-``` csharp
-    public async Task UpdateAsync(Deelnemer nieuweDeelnemer)
-        {
-            using (var uow = _uowProvider.CreateUnitOfWork())
-            {
-                var repository = uow.GetRepository<IRepository<Deelnemer>>();
-                repository.Remove(nieuweDeelnemer);
-                await uow.SaveChangesAsync();
-            }
-        }
-```
-
-of
+Retrieve a single record by id, optionally passing in an IncludeList of child entities that you also want retrieved :  
 
 ``` csharp
-    public async Task UpdateAsync(Deelnemer nieuweDeelnemer)
-        {
-            using (var uow = _uowProvider.CreateUnitOfWork())
-            {
-                var repository = uow.GetRepository<IRepository<Deelnemer>>();
-                repository.Remove(nieuweDeelnemer.Id);
-                await uow.SaveChangesAsync();
-            }
-        }
+using (var uow = _uowProvider.CreateUnitOfWork())
+{
+    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    
+    // retrieve MyEntity with id = 5
+    var entity = repository.Get(5);
+    
+    // retrieve MyEntity with id 12 and its child object
+    var includeList = new IncludeList<MyEntity>(e => e.Child);
+    var entity2 = repository.Get(12, includes: includeList);
+}
 ```
 
-## Versies
+### GetAll / GetAllAsync  
 
-| Versie | Auteur                                  | Omschrijving
-| ------ | ----------------------------------------| ----------------------------------------------------
-| 1.0.0  | Steven Vanden Broeck                    | Initiële versie.
-| 1.2.0  | Sven Noreillie                          | Vervangt DataAccess folder
+Retrieves all records, with or without child records.
 
+``` csharp  
+using (var uow = _uowProvider.CreateUnitOfWork(false))
+{
+    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    var entities = repository.GetAll(includes: includes);
+}
+```  
 
+### Add  
+
+Adds a record to the repository. The record is persisted to the database when calling IUnitOfWork.SaveChanges().
+
+``` csharp
+using (var uow = _uowProvider.CreateUnitOfWork())
+{
+    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    repository.Add(newEntity);
+    uow.SaveChanges();
+}
+```
+
+### Update  
+
+Updates an existing record.
+
+``` csharp  
+using (var uow = _uowProvider.CreateUnitOfWork())
+{
+    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    repository.Update(updatedEntity);
+    await uow.SaveChangesAsync();
+}
+```  
+
+### Remove    
+
+You can call this method with an existing entity :  
+
+``` csharp  
+using (var uow = _uowProvider.CreateUnitOfWork())
+{
+    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    repository.Remove(existingEntity);
+    await uow.SaveChangesAsync();
+}
+```  
+
+Or with the Id of an existing entity :  
+
+``` csharp  
+using (var uow = _uowProvider.CreateUnitOfWork())
+{
+    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    repository.Remove(id);
+    uow.SaveChangesAsync();
+}
+```
+
+### Custom Repositories 
+
+...to do...
