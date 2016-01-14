@@ -22,13 +22,7 @@ It contains :
   - [NpgSql](#npgsql)
 - [EntityContext](#entitycontext)
 - [Entities](#entities)
-- [Gebruik](#gebruik)
-  - [Get](#get)
-  - [GetAll](#getall)
-  - [Insert](#insert)
-  - [Update](#update)
-  - [Delete](#delete)
-- [Versies](#versies)
+- [UnitOfWork](#unitofwork)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
