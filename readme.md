@@ -23,6 +23,13 @@ It contains :
 - [EntityContext](#entitycontext)
 - [Entities](#entities)
 - [UnitOfWork](#unitofwork)
+- [Repositories](#repositories)
+  - [Get and GetAsync](#get-and-getasync)
+  - [GetAll and GetAllAsync](#getall-and-getallasync)
+  - [Add](#add)
+  - [Update](#update)
+  - [Remove](#remove)
+  - [Custom Repositories](#custom-repositories)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -167,7 +174,7 @@ public class MyEntity : EntityBase
 
 The EntityBase class already contains an int property, named Id.    
 
-## UnitOfWork  
+## UnitOfWork
 
 The toolbox contains a UnitOfWork class and IUnitofWork interface that encapsulates the DbContext and that you use in your business classes to separate the data access code from business code.  
 The IUnitOfWork is instantiated by the IUowProvider.  
@@ -186,22 +193,22 @@ public class BusinessClass
 }
 ```
  
- Then ask the IUowProvider for a IUnitOfWork :  
+Then ask the IUowProvider for a IUnitOfWork :  
  
- ``` csharp  
- using ( var uow = _uowProvider.CreateUnitOfWork() )
- {
-    // your business logica that needs dataaccess comes here   
- }
- ```  
+``` csharp  
+using ( var uow = _uowProvider.CreateUnitOfWork() )
+{
+   // your business logic that needs dataaccess comes here   
+}
+```
  
- You can pass in false if you don't want the change tracking to activate (better performance when you only want to retrieve data and not insert/update/delete).  
+You can pass in false if you don't want the change tracking to activate (better performance when you only want to retrieve data and not insert/update/delete).  
  
- Now Access your data via repositories :    
+Now Access your data via repositories :    
  
- ``` csharp  
- var repository = uow.GetRepository<MyEntity>();
- // your data access code via the repository comes here
+``` csharp  
+var repository = uow.GetRepository<MyEntity>();
+// your data access code via the repository comes here
 ```  
 
 The UnitOfWork will be automatically injected in the repository and use it to interact with the database.  
@@ -216,7 +223,7 @@ uow.SaveChanges();
 
 The toolbox registers generic repositories in the ASP.NET 5 DI container. They provide the following methods :    
 
-### Get / GetAsync  
+### Get and GetAsync
 
 Retrieve a single record by id, optionally passing in an IncludeList of child entities that you also want retrieved :  
 
@@ -234,7 +241,7 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 }
 ```
 
-### GetAll / GetAllAsync  
+### GetAll and GetAllAsync
 
 Retrieves all records, with or without child records.
 
@@ -246,7 +253,7 @@ using (var uow = _uowProvider.CreateUnitOfWork(false))
 }
 ```  
 
-### Add  
+### Add
 
 Adds a record to the repository. The record is persisted to the database when calling IUnitOfWork.SaveChanges().
 
@@ -259,7 +266,7 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 }
 ```
 
-### Update  
+### Update
 
 Updates an existing record.
 
@@ -272,7 +279,7 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 }
 ```  
 
-### Remove    
+### Remove
 
 You can call this method with an existing entity :  
 
@@ -296,6 +303,6 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 }
 ```
 
-### Custom Repositories 
+### Custom Repositories
 
 ...to do...
