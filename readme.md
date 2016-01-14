@@ -305,4 +305,34 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 
 ### Custom Repositories
 
-...to do...
+When you need more functionality in a repository than the generic methods, you can create our own repositories by inheriting from the repository base classes.  
+
+To make a repository that is tied to 1 entity type, you inherit from the _**EntityRepositoryBase**_ class : 
+
+``` csharp
+public class MyRepository<MyEntity> : EntityRepositoryBase<MyDbContext, MyEntity>, IMyRepository
+{
+    public MyRepository(ILogger logger) : base(logger, null)
+    { }
+}
+```
+
+This base class already contains the generic Add, Update, Delete, Get and Query methods.
+
+If you just want to start with an empty repository or a repository that is not tied to 1 type of entity, inherit from the _**RepositoryBase**_ class :
+
+``` csharp
+public class MyRepository : RepositoryBase, IMyRepository
+{
+    public MyRepository(ILogger logger) : base(logger, null)
+    { }
+}
+```
+
+**Don't forget to register your own repositories in the DI container at startup :**
+
+``` csharp
+services.AddTransient<IMyRepository, MyRepository>();        // or any other scope (Scoped, Singleton).
+```
+
+
