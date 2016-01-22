@@ -39,7 +39,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    "Toolbox.DataAccess":  "1.3.0", 
+    "Toolbox.DataAccess":  "1.4.0", 
  }
 ```
 
@@ -47,7 +47,7 @@ Alternatively, it can also be added via the NuGet Package Manager interface.
 
 ## Configuration in Startup.ConfigureServices
 
-The DataAccess framework is registered in the _*ConfigureServices*_ method of the *Startup* class.
+The DataAccess framework is registered in the _**ConfigureServices**_ method of the *Startup* class.
 
 There are 2 ways to configure the DataAccess framework :
 - using a json config file
@@ -116,6 +116,8 @@ public class PostgresDbConfiguration : DbConfiguration
     }
 }
 ``` 
+
+You can create this class yourself in your project, or you can include the Toolbox.DataAccess.Postgres package that contains this class.
 
 In Startup.ConfigureServices : 
 
