@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{263D749B-E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{708891CD-FD0A-455F-9ECE-9615ADDC7A64}"
 	ProjectSection(SolutionItems) = preProject
+		changelog.md = changelog.md
 		global.json = global.json
 		gulpfile.js = gulpfile.js
 		nuget.config = nuget.config
