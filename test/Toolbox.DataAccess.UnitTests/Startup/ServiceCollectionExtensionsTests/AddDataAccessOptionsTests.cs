@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.OptionsModel;
 using Toolbox.DataAccess.Context;
 using Toolbox.DataAccess.Options;
+using Toolbox.DataAccess.Paging;
 using Toolbox.DataAccess.Repositories;
 using Toolbox.DataAccess.Uow;
 using Xunit;
@@ -102,6 +103,21 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
             configOptions.Configure(options);
             Assert.Same(connString, options.ConnectionString);
             Assert.True(options.LazyLoadingEnabled);
+        }
+
+        [Fact]
+        private void DataPagerIsRegisteredAsTransient()
+        {
+            var connString = new ConnectionString("host", 123, "dbname");
+            var services = new ServiceCollection();
+
+            services.AddDataAccess<EntityContextBase>(opt => opt.ConnectionString = connString);
+
+            var registrations = services.Where(sd => sd.ServiceType == typeof(IDataPager<>)
+                                               && sd.ImplementationType == typeof(DataPager<>))
+                                        .ToArray();
+            Assert.Equal(1, registrations.Count());
+            Assert.Equal(ServiceLifetime.Transient, registrations[0].Lifetime);
         }
 
         [Fact]

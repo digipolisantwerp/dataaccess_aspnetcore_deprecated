@@ -7,6 +7,7 @@ using Toolbox.DataAccess.Uow;
 using Toolbox.DataAccess.Repositories;
 using Toolbox.DataAccess.Options;
 using System.Data.Entity;
+using Toolbox.DataAccess.Paging;
 
 namespace Toolbox.DataAccess
 {
@@ -74,6 +75,7 @@ namespace Toolbox.DataAccess
             services.TryAddSingleton<IUowProvider, UowProvider>();
             services.TryAddTransient<EntityContextBase, TEntityContext>();
             services.TryAddTransient(typeof(IRepository<>), typeof(GenericEntityRepository<>));
+            services.TryAddTransient(typeof(IDataPager<>), typeof(DataPager<>));
         }
 
         private static void ValidateMandatoryField(string field, string fieldName)

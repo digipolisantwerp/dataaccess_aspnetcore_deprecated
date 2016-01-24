@@ -30,6 +30,7 @@ It contains :
   - [Update](#update)
   - [Remove](#remove)
   - [Custom Repositories](#custom-repositories)
+- [Paging](#paging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -337,4 +338,35 @@ public class MyRepository : RepositoryBase, IMyRepository
 services.AddTransient<IMyRepository, MyRepository>();        // or any other scope (Scoped, Singleton).
 ```
 
+## Paging
+
+When working with large collections of data you'll want to keep your application performant. Instead of retrieving all records, you can serve your data
+to the consumer in pages.  
+
+The repositories have methods that can be used with paging systems. You can also inject a IDataPager object in your classes to retrieve paged data :  
+
+``` csharp
+public class MyBusinessClass
+{
+    public MyBusinessClass(IDataPager<MyEntity> pager)
+    {
+        _pager = pager;
+    }
+
+    private readonly IDataPager<MyEntity> _pager;
+}
+```
+
+and call its methods to retrieve paged data :
+
+``` csharp
+var pageNumber = 1;
+var pageLength = 10;
+
+var data = _pager.Get(pageNumber, pageLength);
+
+var filter = new Filter<MyEntity>(e => e.AProperty == true);
+
+var filteredData = _pager.Query(pageNumber, pageLenght, filter);
+```
 
