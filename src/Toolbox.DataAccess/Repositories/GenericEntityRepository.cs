@@ -6,7 +6,7 @@ namespace Toolbox.DataAccess.Repositories
 {
     public class GenericEntityRepository<TEntity> : EntityRepositoryBase<DbContext, TEntity> where TEntity : EntityBase, new()
     {
-		public GenericEntityRepository(ILogger logger) : base(logger, null)
+		public GenericEntityRepository(ILogger<DataAccess> logger) : base(logger, null)
 		{ }
 	}
 }

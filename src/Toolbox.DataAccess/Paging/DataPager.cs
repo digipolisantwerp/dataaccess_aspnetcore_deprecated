@@ -19,7 +19,7 @@ namespace Toolbox.DataAccess.Paging
         {
             using ( var uow = _uowProvider.CreateUnitOfWork(false) )
             {
-                var repository = uow.GetRepository<IRepository<TEntity>>();
+                var repository = uow.GetRepository<TEntity>();
 
                 var startRow = ( pageNumber - 1 ) * pageLength;
                 var page = new DataPage<TEntity>()
@@ -36,7 +36,7 @@ namespace Toolbox.DataAccess.Paging
         {
             using ( var uow = _uowProvider.CreateUnitOfWork(false) )
             {
-                var repository = uow.GetRepository<IRepository<TEntity>>();
+                var repository = uow.GetRepository<TEntity>();
 
                 var startRow = ( pageNumber - 1 ) * pageLength;
                 var page = new DataPage<TEntity>()
@@ -53,7 +53,7 @@ namespace Toolbox.DataAccess.Paging
         {
             using ( var uow = _uowProvider.CreateUnitOfWork(false) )
             {
-                var repository = uow.GetRepository<IRepository<TEntity>>();
+                var repository = uow.GetRepository<TEntity>();
 
                 var startRow = ( pageNumber - 1 ) * pageLength;
                 var page = new DataPage<TEntity>()
@@ -70,7 +70,7 @@ namespace Toolbox.DataAccess.Paging
         {
             using ( var uow = _uowProvider.CreateUnitOfWork(false) )
             {
-                var repository = uow.GetRepository<IRepository<TEntity>>();
+                var repository = uow.GetRepository<TEntity>();
 
                 var startRow = ( pageNumber - 1 ) * pageLength;
                 var page = new DataPage<TEntity>()

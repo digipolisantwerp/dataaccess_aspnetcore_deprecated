@@ -5,7 +5,7 @@ namespace Toolbox.DataAccess.Repositories
 {
     public abstract class RepositoryBase<TContext> : IRepositoryInjection<TContext> where TContext : DbContext
     {
-        protected RepositoryBase(ILogger logger, TContext context)
+        protected RepositoryBase(ILogger<DataAccess> logger, TContext context)
         {
             this.Logger = logger;
             this.Context = context;

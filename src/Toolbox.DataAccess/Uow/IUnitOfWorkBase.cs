@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Toolbox.DataAccess.Entities;
+using Toolbox.DataAccess.Repositories;
 
 namespace Toolbox.DataAccess.Uow
 {
@@ -10,6 +12,6 @@ namespace Toolbox.DataAccess.Uow
         Task<int> SaveChangesAsync();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
-        TRepository GetRepository<TRepository>();
+        IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase;
     }
 }

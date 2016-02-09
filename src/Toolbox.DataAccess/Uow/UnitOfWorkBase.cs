@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using Toolbox.DataAccess.Exceptions;
 using Toolbox.DataAccess.Repositories;
+using Toolbox.DataAccess.Entities;
 
 namespace Toolbox.DataAccess.Uow
 {
@@ -36,11 +37,11 @@ namespace Toolbox.DataAccess.Uow
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        public TRepository GetRepository<TRepository>()
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
         {
             CheckDisposed();
-			var repositoryType = typeof(TRepository);
-            var repository = (TRepository)_serviceProvider.GetService(repositoryType);
+            var repositoryType = typeof(IRepository<TEntity>);
+            var repository = (IRepository<TEntity>)_serviceProvider.GetService(repositoryType);
 			if ( repository == null )
 			{
 				throw new RepositoryNotFoundException(repositoryType.Name, String.Format("Repository {0} not found in the IOC container. Check if it is registered during startup.", repositoryType.Name));

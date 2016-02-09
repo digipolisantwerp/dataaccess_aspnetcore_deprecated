@@ -1,0 +1,14 @@
+﻿{
+  "DataAccess": {
+    "ConnectionString": {
+      "Host": "testhost",
+      "Port": "5555",
+      "DbName": "testdb",
+      "User": "testuser",
+      "Password": "testpwd"
+    },
+    "LazyLoadingEnabled": true,
+    "PluralizeTableNames": false,
+    "DefaultSchema":  "testschema"
+  }
+}

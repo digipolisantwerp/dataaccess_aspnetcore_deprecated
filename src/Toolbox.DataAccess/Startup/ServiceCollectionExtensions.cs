@@ -56,6 +56,8 @@ namespace Toolbox.DataAccess
             {
                 opt.ConnectionString = options.ConnectionString;
                 opt.LazyLoadingEnabled = options.LazyLoadingEnabled;
+                opt.DefaultSchema = options.DefaultSchema;
+                opt.PluralizeTableNames = options.PluralizeTableNames;
             });
         }
 

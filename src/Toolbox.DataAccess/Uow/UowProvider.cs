@@ -6,7 +6,13 @@ namespace Toolbox.DataAccess.Uow
 {
     public class UowProvider : IUowProvider
     {
-        public UowProvider(ILogger logger, IServiceProvider serviceProvider)
+
+        public UowProvider()
+        {
+
+        }
+
+        public UowProvider(ILogger<DataAccess> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

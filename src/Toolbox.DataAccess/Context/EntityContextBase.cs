@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using Microsoft.Extensions.OptionsModel;
 using Toolbox.DataAccess.Options;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace Toolbox.DataAccess.Context
 {
@@ -13,5 +14,16 @@ namespace Toolbox.DataAccess.Context
         }
 
         protected EntityContextOptions EntityContextOptions { get; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            if (EntityContextOptions.DefaultSchema != Defaults.EntityContextOptions.DefaultSchema)
+                modelBuilder.HasDefaultSchema(EntityContextOptions.DefaultSchema);
+
+            if(!EntityContextOptions.PluralizeTableNames)
+                modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+        }
     }
 }

@@ -106,6 +106,33 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
         }
 
         [Fact]
+        private void OptionalEntityContextOptionsAreSet()
+        {
+            var connString = new ConnectionString("host", 123, "dbname");
+            var services = new ServiceCollection();
+
+            services.AddDataAccess<EntityContextBase>(opt =>
+            {
+                opt.ConnectionString = connString;
+                opt.LazyLoadingEnabled = true;
+                opt.DefaultSchema = "schemaname";
+                opt.PluralizeTableNames = false;
+            });
+
+            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<EntityContextOptions>)).ToArray();
+            Assert.Equal(1, registrations.Count());
+            Assert.Equal(ServiceLifetime.Singleton, registrations[0].Lifetime);
+
+            var configOptions = registrations[0].ImplementationInstance as IConfigureOptions<EntityContextOptions>;
+            Assert.NotNull(configOptions);
+
+            var options = new EntityContextOptions();
+            configOptions.Configure(options);
+            Assert.False(options.PluralizeTableNames);
+            Assert.Equal("schemaname", options.DefaultSchema);
+        }
+
+        [Fact]
         private void DataPagerIsRegisteredAsTransient()
         {
             var connString = new ConnectionString("host", 123, "dbname");

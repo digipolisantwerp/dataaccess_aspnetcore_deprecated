@@ -40,7 +40,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    "Toolbox.DataAccess":  "1.4.0", 
+    "Toolbox.DataAccess":  "1.6.0", 
  }
 ```
 
@@ -56,7 +56,7 @@ There are 2 ways to configure the DataAccess framework :
 
 ### Json config file 
 
-The path to the Json config file has to be given as argument to the _*AddDataAccess*_ method, together with the concrete type of your DbContect as generic parameter :
+The path to the Json config file has to be given as argument to the _*AddDataAccess*_ method, together with the concrete type of your DbContext as generic parameter :
 
 ``` csharp
 services.AddDataAccess<MyEntityContext>(opt => opt.FileName = "configs/dbconfig./json");
@@ -85,11 +85,15 @@ The DataAccess framework will read the given section of the json file with the f
             "User": "user",
             "Password":  "pwd"
         },
-        "LazyLoadingEnabled": false
+        "LazyLoadingEnabled": false,
+        "PluralizeTableNames": false,
+        "DefaultSchema":  "schemaname"
     }
 }
 ```
 Port is optional. If it is included it must contain a valid port number (numeric value from 0 to 65535).
+PluralizeTableNames is optional, the default value is true.
+DefaultSchema is optional, the default value is "dbo".
 
 ### Code
 
@@ -143,7 +147,7 @@ services.AddDataAccess<MyEntityContext>(opt =>
 
 ## EntityContext
 
-You inherit a DbContect object from the EntityContextBase class in the toolbox. This context contains all your project-specific DbSets and custom logic.   
+You inherit a DbContext object from the EntityContextBase class in the toolbox. This context contains all your project-specific DbSets and custom logic.   
 The constructor has to accept an IOptions&lt;EntityContextOptions&gt; as input parameter, to be passed to the base constructor. This EntityContextOptions object is constructed from the DataAccess options, configured in the Startup class (see higher).
 
 For example :  
@@ -233,7 +237,7 @@ Retrieve a single record by id, optionally passing in an IncludeList of child en
 ``` csharp
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
-    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    var repository = uow.GetRepository<MyEntity>();
     
     // retrieve MyEntity with id = 5
     var entity = repository.Get(5);
@@ -251,7 +255,7 @@ Retrieves all records, with or without child records.
 ``` csharp  
 using (var uow = _uowProvider.CreateUnitOfWork(false))
 {
-    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    var repository = uow.GetRepository<MyEntity>();
     var entities = repository.GetAll(includes: includes);
 }
 ```  
@@ -263,7 +267,7 @@ Adds a record to the repository. The record is persisted to the database when ca
 ``` csharp
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
-    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    var repository = uow.GetRepository<MyEntity>();
     repository.Add(newEntity);
     uow.SaveChanges();
 }
@@ -276,7 +280,7 @@ Updates an existing record.
 ``` csharp  
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
-    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    var repository = uow.GetRepository<MyEntity>();
     repository.Update(updatedEntity);
     await uow.SaveChangesAsync();
 }
@@ -289,7 +293,7 @@ You can call this method with an existing entity :
 ``` csharp  
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
-    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    var repository = uow.GetRepository<MyEntity>();
     repository.Remove(existingEntity);
     await uow.SaveChangesAsync();
 }
@@ -300,7 +304,7 @@ Or with the Id of an existing entity :
 ``` csharp  
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
-    var repository = uow.GetRepository<IRepository<MyEntity>>();
+    var repository = uow.GetRepository<MyEntity>();
     repository.Remove(id);
     uow.SaveChangesAsync();
 }

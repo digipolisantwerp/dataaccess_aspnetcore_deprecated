@@ -1,19 +1,20 @@
 {
-    "version": "1.5.0",
+    "version": "1.6.0",
     "description": "DataAccess toolbox.",
     "authors": [ "digipolis.be" ],
     "tags": [ "" ],
     "projectUrl": "",
     "licenseUrl": "",
-    "dependencies": {
-        "EntityFramework": "6.1.2",
-        "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
-        "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
-        "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
-        "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
-        "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final"
-    },
+  "dependencies": {
+    "EntityFramework": "6.1.2",
+    "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging":  "1.0.0-rc1-final"
+  },
 	"frameworks": {
 		"dnx451": {
 			"frameworkAssemblies": {

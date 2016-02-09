@@ -15,7 +15,7 @@ namespace Toolbox.DataAccess.Repositories
 	{
 		private readonly OrderBy<TEntity> DefaultOrderBy = new OrderBy<TEntity>(qry => qry.OrderBy(e => e.Id));
 
-		protected EntityRepositoryBase(ILogger logger, TContext context) : base(logger, context)
+		protected EntityRepositoryBase(ILogger<DataAccess> logger, TContext context) : base(logger, context)
 		{ }
 
 		public virtual IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
@@ -58,7 +58,7 @@ namespace Toolbox.DataAccess.Repositories
 			return query.SingleOrDefault(x => x.Id == id);
 		}
 
-		public virtual async Task<TEntity> GetAsync(int id, IncludeList<TEntity> includes = null)
+		public virtual Task<TEntity> GetAsync(int id, IncludeList<TEntity> includes = null)
 		{
 			IQueryable<TEntity> query = Context.Set<TEntity>();
 
@@ -67,7 +67,7 @@ namespace Toolbox.DataAccess.Repositories
 				query = AddIncludes(query, includes);
 			}
 
-			return await query.SingleOrDefaultAsync(x => x.Id == id);
+			return query.SingleOrDefaultAsync(x => x.Id == id);
 		}
 
 		public virtual IEnumerable<TEntity> Query(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)

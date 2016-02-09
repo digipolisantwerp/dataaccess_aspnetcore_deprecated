@@ -7,3 +7,10 @@
 ## 1.5.0
 
 - Added paging.
+
+## 1.6.0
+
+- Added PluralizeTableNames to EntityContextOptions.
+- Added DefaultSchema to EntityContextOptions.
+- Changed generic implementation of GetRepository.
+- Changed dependencies to logger from ILogger to ILogger of DataAccess

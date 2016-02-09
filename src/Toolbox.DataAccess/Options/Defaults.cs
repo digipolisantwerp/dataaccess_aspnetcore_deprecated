@@ -20,6 +20,8 @@ namespace Toolbox.DataAccess.Options
         public class EntityContextOptions
         {
             public const bool LazyLoadingEnabled = false;
+            public const bool PluralizeTableNames = true;
+            public const string DefaultSchema = "dbo";
         }
     }
 }

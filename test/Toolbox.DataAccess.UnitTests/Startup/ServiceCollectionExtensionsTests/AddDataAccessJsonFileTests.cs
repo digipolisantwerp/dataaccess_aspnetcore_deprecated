@@ -32,7 +32,7 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
 
-            services.AddDataAccess<EntityContextBase>(opt => opt.FileName = "_TestData/dbconfig.json");
+            services.AddDataAccess<EntityContextBase>(opt => opt.FileName = "_TestData/dbconfig1.json");
 
             var registrations = services.Where(sd => sd.ServiceType == typeof(IUowProvider)
                                                && sd.ImplementationType == typeof(UowProvider))
@@ -47,7 +47,7 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
 
-            services.AddDataAccess<EntityContextBase>(opt => opt.FileName = "_TestData/dbconfig.json");
+            services.AddDataAccess<EntityContextBase>(opt => opt.FileName = "_TestData/dbconfig1.json");
 
             var registrations = services.Where(sd => sd.ServiceType == typeof(EntityContextBase)
                                                && sd.ImplementationType == typeof(EntityContextBase))
@@ -62,7 +62,7 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
             var connString = new ConnectionString("host", 123, "dbname");
             var services = new ServiceCollection();
 
-            services.AddDataAccess<EntityContextBase>(opt => opt.FileName = "_TestData/dbconfig.json");
+            services.AddDataAccess<EntityContextBase>(opt => opt.FileName = "_TestData/dbconfig1.json");
 
             var registrations = services.Where(sd => sd.ServiceType == typeof(IRepository<>)
                                                && sd.ImplementationType == typeof(GenericEntityRepository<>))
@@ -140,7 +140,7 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
 
             services.AddDataAccess<EntityContextBase>(opt =>
                                                         {
-                                                            opt.FileName = "_TestData/dbconfig.json";
+                                                            opt.FileName = "_TestData/dbconfig1.json";
                                                             opt.Section = "DataAccess";
                                                         });
 
@@ -160,6 +160,32 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
             Assert.Equal("testuser", options.ConnectionString.User);
             Assert.Equal("testpwd", options.ConnectionString.Password);
             Assert.True(options.LazyLoadingEnabled);
+            Assert.True(options.PluralizeTableNames);
+            Assert.Equal("dbo", options.DefaultSchema);
+        }
+
+        [Fact]
+        private void OptionalEntityContextOptionsAreSet()
+        {
+            var services = new ServiceCollection();
+
+            services.AddDataAccess<EntityContextBase>(opt =>
+            {
+                opt.FileName = "_TestData/dbconfig2.json";
+                opt.Section = "DataAccess";
+            });
+
+            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<EntityContextOptions>)).ToArray();
+            Assert.Equal(1, registrations.Count());
+            Assert.Equal(ServiceLifetime.Singleton, registrations[0].Lifetime);
+
+            var configOptions = registrations[0].ImplementationInstance as IConfigureOptions<EntityContextOptions>;
+            Assert.NotNull(configOptions);
+
+            var options = new EntityContextOptions();
+            configOptions.Configure(options);
+            Assert.False(options.PluralizeTableNames);
+            Assert.Equal("testschema", options.DefaultSchema);
         }
 
         [Fact]
@@ -190,7 +216,7 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
 
             services.AddDataAccess<EntityContextBase>(opt =>
                                                         {
-                                                            opt.FileName = "_TestData/dbconfig.json";
+                                                            opt.FileName = "_TestData/dbconfig1.json";
                                                             opt.Section = "DataAccess";
                                                             opt.DbConfiguration = dbConfig;
                                                         });

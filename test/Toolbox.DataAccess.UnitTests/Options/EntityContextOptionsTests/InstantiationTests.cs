@@ -19,5 +19,20 @@ namespace Toolbox.DataAccess.UnitTests.Options.EntityContextOptionsTests
             var options = new EntityContextOptions();
             Assert.Equal(Defaults.EntityContextOptions.LazyLoadingEnabled, options.LazyLoadingEnabled);
         }
+
+        [Fact]
+        private void DefaultPluralizeTableNamesIsSet()
+        {
+            var options = new EntityContextOptions();
+            Assert.Equal(Defaults.EntityContextOptions.PluralizeTableNames, options.PluralizeTableNames);
+        }
+
+        [Fact]
+        private void DefaultDefaultSchemaIsSet()
+        {
+            var options = new EntityContextOptions();
+            Assert.Equal(Defaults.EntityContextOptions.DefaultSchema, options.DefaultSchema);
+        }
+
     }
 }
