@@ -14,7 +14,7 @@ namespace Toolbox.DataAccess.Options
 
         public bool DisableCascadingDeletes { get; set; } = Defaults.EntityContextOptions.DisableCascadingDeletes;
 
-        public bool ForceLowercase { get; set; } = Defaults.EntityContextOptions.ForceLowercase;
+        public bool ForceLowercase { get; set; } = Defaults.EntityContextOptions.UseLowercaseOnTablesAndFields;
 
 
         
