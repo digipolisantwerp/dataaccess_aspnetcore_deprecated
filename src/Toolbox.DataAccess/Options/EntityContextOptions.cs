@@ -11,5 +11,12 @@ namespace Toolbox.DataAccess.Options
         public bool PluralizeTableNames { get; set; } = Defaults.EntityContextOptions.PluralizeTableNames;
 
         public string DefaultSchema { get; set; } = Defaults.EntityContextOptions.DefaultSchema;
+
+        public bool DisableCascadingDeletes { get; set; } = Defaults.EntityContextOptions.DisableCascadingDeletes;
+
+        public bool ForceLowercase { get; set; } = Defaults.EntityContextOptions.ForceLowercase;
+
+
+        
     }
 }
