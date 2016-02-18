@@ -26,7 +26,7 @@ namespace Toolbox.DataAccess.Context
                 modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
 
-            if (EntityContextOptions.ForceLowercase)
+            if (EntityContextOptions.UseLowercaseOnTablesAndFields)
             {                
                 modelBuilder.Types().Configure(c =>
                 { c.ToTable(c.ClrType.Name.ToLower()); }

@@ -59,7 +59,7 @@ namespace Toolbox.DataAccess
                 opt.DefaultSchema = options.DefaultSchema;
                 opt.PluralizeTableNames = options.PluralizeTableNames;
                 opt.DisableCascadingDeletes = options.DisableCascadingDeletes;
-                opt.ForceLowercase = options.ForceLowercase;
+                opt.UseLowercaseOnTablesAndFields = options.UseLowercaseOnTablesAndFields;
             });
         }
 
