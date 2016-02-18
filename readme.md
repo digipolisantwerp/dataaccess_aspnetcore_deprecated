@@ -87,13 +87,18 @@ The DataAccess framework will read the given section of the json file with the f
         },
         "LazyLoadingEnabled": false,
         "PluralizeTableNames": false,
-        "DefaultSchema":  "schemaname"
+        "DefaultSchema":  "schemaname",
+        "DisableCascadingDeletes":  false,
+        "UseLowercaseOnTablesAndFields":  false
     }
 }
 ```
 Port is optional. If it is included it must contain a valid port number (numeric value from 0 to 65535).
 PluralizeTableNames is optional, the default value is true.
 DefaultSchema is optional, the default value is "dbo".
+DisableCascadingDeletes is optional, the default value is false.
+UseLowercaseOnTablesAndFields is optional, the default value is false.
+
 
 ### Code
 
