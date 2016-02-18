@@ -22,6 +22,8 @@ namespace Toolbox.DataAccess.Options
             public const bool LazyLoadingEnabled = false;
             public const bool PluralizeTableNames = true;
             public const string DefaultSchema = "dbo";
+            public const bool DisableCascadingDeletes = false;
+            public const bool UseLowercaseOnTablesAndFields = false;
         }
     }
 }

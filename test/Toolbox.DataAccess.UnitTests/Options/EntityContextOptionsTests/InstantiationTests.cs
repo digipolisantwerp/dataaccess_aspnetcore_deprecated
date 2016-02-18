@@ -34,5 +34,19 @@ namespace Toolbox.DataAccess.UnitTests.Options.EntityContextOptionsTests
             Assert.Equal(Defaults.EntityContextOptions.DefaultSchema, options.DefaultSchema);
         }
 
+        [Fact]
+        private void DefaultDisableCascadingDeletesIsSet()
+        {
+            var options = new EntityContextOptions();
+            Assert.Equal(Defaults.EntityContextOptions.DisableCascadingDeletes, options.DisableCascadingDeletes);
+        }
+
+        [Fact]
+        private void DefaultUseLowercaseOnTablesAndFieldsIsSet()
+        {
+            var options = new EntityContextOptions();
+            Assert.Equal(Defaults.EntityContextOptions.UseLowercaseOnTablesAndFields, options.UseLowercaseOnTablesAndFields);
+        }
+
     }
 }

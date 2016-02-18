@@ -117,6 +117,8 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
                 opt.LazyLoadingEnabled = true;
                 opt.DefaultSchema = "schemaname";
                 opt.PluralizeTableNames = false;
+                opt.DisableCascadingDeletes = false;
+                opt.UseLowercaseOnTablesAndFields = false;
             });
 
             var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<EntityContextOptions>)).ToArray();
@@ -129,6 +131,8 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
             var options = new EntityContextOptions();
             configOptions.Configure(options);
             Assert.False(options.PluralizeTableNames);
+            Assert.False(options.DisableCascadingDeletes);
+            Assert.False(options.UseLowercaseOnTablesAndFields);
             Assert.Equal("schemaname", options.DefaultSchema);
         }
 

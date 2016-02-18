@@ -189,6 +189,35 @@ namespace Toolbox.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTests
         }
 
         [Fact]
+        private void OptionalOptionsAreSetToDefaults()
+        {
+            var services = new ServiceCollection();
+
+            services.AddDataAccess<EntityContextBase>(opt =>
+            {
+                opt.FileName = "_TestData/dbconfig1.json";
+                opt.Section = "DataAccess";
+            });
+
+            var registrations = services.Where(sd => sd.ServiceType == typeof(IConfigureOptions<EntityContextOptions>)).ToArray();
+            Assert.Equal(1, registrations.Count());
+            Assert.Equal(ServiceLifetime.Singleton, registrations[0].Lifetime);
+
+            var configOptions = registrations[0].ImplementationInstance as IConfigureOptions<EntityContextOptions>;
+            Assert.NotNull(configOptions);
+
+            var options = new EntityContextOptions();
+            configOptions.Configure(options);
+
+
+            Assert.Equal(Defaults.EntityContextOptions.DisableCascadingDeletes, options.DisableCascadingDeletes);
+            Assert.Equal(Defaults.EntityContextOptions.UseLowercaseOnTablesAndFields, options.UseLowercaseOnTablesAndFields);
+            Assert.Equal(Defaults.EntityContextOptions.PluralizeTableNames, options.PluralizeTableNames);
+
+
+        }
+
+        [Fact]
         private void DataPagerIsRegisteredAsTransient()
         {
             var connString = new ConnectionString("host", 123, "dbname");

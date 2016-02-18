@@ -24,6 +24,29 @@ namespace Toolbox.DataAccess.Context
 
             if(!EntityContextOptions.PluralizeTableNames)
                 modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+
+            if (EntityContextOptions.UseLowercaseOnTablesAndFields)
+            {                
+                modelBuilder.Types().Configure(c =>
+                { c.ToTable(c.ClrType.Name.ToLower()); }
+                );
+                modelBuilder.Properties().Configure(c =>
+                { c.HasColumnName(c.ClrPropertyInfo.Name.ToLower()); }
+                );
+            }
+
+
+            if (EntityContextOptions.DisableCascadingDeletes)
+            {
+                modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+                modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+
+            }
+
+
+
+
         }
     }
 }

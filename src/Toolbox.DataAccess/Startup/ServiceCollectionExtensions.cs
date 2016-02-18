@@ -58,6 +58,8 @@ namespace Toolbox.DataAccess
                 opt.LazyLoadingEnabled = options.LazyLoadingEnabled;
                 opt.DefaultSchema = options.DefaultSchema;
                 opt.PluralizeTableNames = options.PluralizeTableNames;
+                opt.DisableCascadingDeletes = options.DisableCascadingDeletes;
+                opt.UseLowercaseOnTablesAndFields = options.UseLowercaseOnTablesAndFields;
             });
         }
 
