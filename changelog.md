@@ -14,3 +14,7 @@
 - Added DefaultSchema to EntityContextOptions.
 - Changed generic implementation of GetRepository.
 - Changed dependencies to logger from ILogger to ILogger of DataAccess
+
+## 1.6.2
+
+- Re-Added GetRepository<TRepository> (removed in 1.6.0)
