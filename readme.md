@@ -40,7 +40,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    "Toolbox.DataAccess":  "1.6.1", 
+    "Toolbox.DataAccess":  "1.6.1",
  }
 ```
 
@@ -54,7 +54,7 @@ There are 2 ways to configure the DataAccess framework :
 - using a json config file
 - using code
 
-### Json config file 
+### Json config file
 
 The path to the Json config file has to be given as argument to the _*AddDataAccess*_ method, together with the concrete type of your DbContext as generic parameter :
 
@@ -66,10 +66,10 @@ services.AddDataAccess<MyEntityContext>(opt => opt.FileName = "configs/dbconfig.
 If the DataAccess section in your json file is not named 'DataAccess' (=default), also pass in your custom section name :
 
 ``` csharp
-services.AddDataAccess<MyEntityContext>(opt => 
-                                        { 
-                                            opt.FileName = "configs/dbconfig./json"; 
-                                            opt.SectionName = "MyDataAccessSection"; 
+services.AddDataAccess<MyEntityContext>(opt =>
+                                        {
+                                            opt.FileName = "configs/dbconfig./json";
+                                            opt.SectionName = "MyDataAccessSection";
                                         });
 ```
 
@@ -102,7 +102,7 @@ UseLowercaseOnTablesAndFields is optional, the default value is false.
 
 ### Code
 
-You can also call the _*AddDataAccess*_ method, passing in the needed options directly : 
+You can also call the _*AddDataAccess*_ method, passing in the needed options directly :
 
 ``` csharp
 var connString = new ConnectionString("host", 1234, "dbname", "user", "pwd");
@@ -115,7 +115,7 @@ When you don't need to specify a port in the connection string, pass 0 to it.
 
 If you use NpgSql, you must also pass in a DbConfiguration object that contains the Npgsql configuration :
 
-``` csharp 
+``` csharp
 public class PostgresDbConfiguration : DbConfiguration
 {
     public PostgresDbConfiguration()
@@ -125,28 +125,28 @@ public class PostgresDbConfiguration : DbConfiguration
         SetProviderServices( "Npgsql", Npgsql.NpgsqlServices .Instance);
     }
 }
-``` 
+```
 
 You can create this class yourself in your project, or you can include the Toolbox.DataAccess.Postgres package that contains this class.
 
-In Startup.ConfigureServices : 
+In Startup.ConfigureServices :
 
-``` csharp 
+``` csharp
 var dbConfig = new PostgresDbConfiguration();
 
 var connString = new ConnectionString("host", 1234, "dbname", "user", "pwd");
-services.AddDataAccess<MyEntityContext>(opt => 
-                                        { 
-                                            opt.ConnectionString = connString; 
+services.AddDataAccess<MyEntityContext>(opt =>
+                                        {
+                                            opt.ConnectionString = connString;
                                             opt.DbConfiguration = dbConfig;
                                         });
 
 // or when using a config file
 
-services.AddDataAccess<MyEntityContext>(opt => 
-                                        { 
-                                            opt.FileName = "configs/dbconfig./json"; 
-                                            opt.DbConfiguration = dbConfig; 
+services.AddDataAccess<MyEntityContext>(opt =>
+                                        {
+                                            opt.FileName = "configs/dbconfig./json";
+                                            opt.DbConfiguration = dbConfig;
                                         });
 ```
 
@@ -165,7 +165,7 @@ For example :
 
         public DbSet<MyEntity> MyEntities { get; set; }
         public DbSet<MyOtherEntity> MyOtherEntities { get; set; }
-        
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			// optional, see Entity Framework documentation
@@ -200,24 +200,24 @@ public class BusinessClass
    {
        _uowProvider = uowProvider;
    }
-   
-   private readonly IUowProvider _uowProvider; 
+
+   private readonly IUowProvider _uowProvider;
 }
 ```
- 
+
 Then ask the IUowProvider for a IUnitOfWork :  
- 
+
 ``` csharp  
 using ( var uow = _uowProvider.CreateUnitOfWork() )
 {
    // your business logic that needs dataaccess comes here   
 }
 ```
- 
+
 You can pass in false if you don't want the change tracking to activate (better performance when you only want to retrieve data and not insert/update/delete).  
- 
+
 Now Access your data via repositories :    
- 
+
 ``` csharp  
 var repository = uow.GetRepository<MyEntity>();
 // your data access code via the repository comes here
@@ -243,10 +243,10 @@ Retrieve a single record by id, optionally passing in an IncludeList of child en
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
     var repository = uow.GetRepository<MyEntity>();
-    
+
     // retrieve MyEntity with id = 5
     var entity = repository.Get(5);
-    
+
     // retrieve MyEntity with id 12 and its child object
     var includeList = new IncludeList<MyEntity>(e => e.Child);
     var entity2 = repository.Get(12, includes: includeList);
@@ -319,7 +319,7 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 
 When you need more functionality in a repository than the generic methods, you can create our own repositories by inheriting from the repository base classes.  
 
-To make a repository that is tied to 1 entity type, you inherit from the _**EntityRepositoryBase**_ class : 
+To make a repository that is tied to 1 entity type, you inherit from the _**EntityRepositoryBase**_ class :
 
 ``` csharp
 public class MyRepository<MyEntity> : EntityRepositoryBase<MyDbContext, MyEntity>, IMyRepository
@@ -345,6 +345,41 @@ public class MyRepository : RepositoryBase, IMyRepository
 
 ``` csharp
 services.AddTransient<IMyRepository, MyRepository>();        // or any other scope (Scoped, Singleton).
+```
+
+## Query
+These helpers help generating queries:
+
+### Filter
+A Filter holds the requested filter (WHERE) values.
+
+``` csharp
+
+List<`Participant`> participants = null;
+
+        using (var uow = _uowProvider.CreateUnitOfWork(false))
+        {
+            Filter<Entities.Participant> filter = new Filter<Entities.Participant>(null);
+
+            filter.AddExpression(e => idList.Contains(e.Id));
+
+            var repository = uow.GetRepository<IRepository<Participant>>();
+
+            participants = (await repository.QueryAsync(filter.Expression, includes:includes)).ToList();
+        }
+```
+
+### IncludeList
+An includelist is a  list of child entities that you want to include in when executing your query.
+[Refer to Get and GetAsync section](#Get-and-GetAsync)
+
+### OrderBy
+Holds the parameters to generate the OrderBy part of the query.
+
+``` csharp
+
+var orderBy = new OrderBy<Entities.Participant>(string.IsNullOrEmpty(paging.Sort) ? "Reservation.DateOfReservation" : paging.Sort, paging.Descending);
+
 ```
 
 ## Paging
@@ -378,4 +413,3 @@ var filter = new Filter<MyEntity>(e => e.AProperty == true);
 
 var filteredData = _pager.Query(pageNumber, pageLenght, filter);
 ```
-
