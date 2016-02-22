@@ -30,7 +30,19 @@ namespace Toolbox.DataAccess.Repositories
 			return await result.ToListAsync();
 		}
 
-		public virtual IEnumerable<TEntity> GetPage(int startRow, int pageLength, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
+        public virtual void Load(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
+        {
+            var result = QueryDb(null, orderBy, includes);
+            result.Load();
+        }
+
+        public virtual async Task LoadAsync(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
+        {
+            var result = QueryDb(null, orderBy, includes);
+            await result.LoadAsync();
+        }
+
+        public virtual IEnumerable<TEntity> GetPage(int startRow, int pageLength, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
 		{
 			if ( orderBy == null ) orderBy = DefaultOrderBy.Expression;
 
@@ -82,7 +94,19 @@ namespace Toolbox.DataAccess.Repositories
 			return await result.ToListAsync();
 		}
 
-		public virtual IEnumerable<TEntity> QueryPage(int startRow, int pageLength, Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
+        public virtual void Load(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
+        {
+            var result = QueryDb(filter, orderBy, includes);
+            result.Load();
+        }
+
+        public virtual async Task LoadAsync(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
+        {
+            var result = QueryDb(filter, orderBy, includes);
+            await result.LoadAsync();
+        }
+
+        public virtual IEnumerable<TEntity> QueryPage(int startRow, int pageLength, Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IncludeList<TEntity> includes = null)
 		{
 			if ( orderBy == null ) orderBy = DefaultOrderBy.Expression;
 

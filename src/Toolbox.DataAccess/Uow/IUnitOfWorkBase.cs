@@ -13,5 +13,6 @@ namespace Toolbox.DataAccess.Uow
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
         IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase;
+        TRepository GetCustomRepository<TRepository>();
     }
 }

@@ -51,6 +51,20 @@ namespace Toolbox.DataAccess.Uow
             return repository;
         }
 
+        public TRepository GetCustomRepository<TRepository>()
+        {
+            CheckDisposed();
+            var repositoryType = typeof(TRepository);
+            var repository = (TRepository)_serviceProvider.GetService(repositoryType);
+            if (repository == null)
+            {
+                throw new RepositoryNotFoundException(repositoryType.Name, String.Format("Repository {0} not found in the IOC container. Check if it is registered during startup.", repositoryType.Name));
+            }
+
+            ((IRepositoryInjection<TContext>)repository).SetContext(_context);
+            return repository;
+        }
+
         #region IDisposable Implementation
 
         protected bool _isDisposed;
