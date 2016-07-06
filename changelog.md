@@ -18,3 +18,7 @@
 ## 1.6.2
 
 - Re-Added GetRepository<TRepository> (removed in 1.6.0)
+
+## 2.0.0
+
+- Upgrade to dotnet core 1.0.0

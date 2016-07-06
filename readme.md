@@ -1,6 +1,6 @@
 # DataAccess Toolbox
 
-The DataAccess Toolbox contains the base classes for data access in ASP.NET 5 with Entity Framework 6.1 using the unit-of-work and repository pattern.
+The DataAccess Toolbox contains the base classes for data access in ASP.NET Core with Entity Framework Core 1.0 using the unit-of-work and repository pattern.
 
 It contains :
 - base classes for entities.
@@ -14,11 +14,8 @@ It contains :
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Installation](#installation)
 - [Configuration in Startup.ConfigureServices](#configuration-in-startupconfigureservices)
-  - [Json config file](#json-config-file)
-  - [Code](#code)
   - [NpgSql](#npgsql)
 - [EntityContext](#entitycontext)
 - [Entities](#entities)
@@ -30,17 +27,20 @@ It contains :
   - [Update](#update)
   - [Remove](#remove)
   - [Custom Repositories](#custom-repositories)
+- [Query](#query)
+  - [Filter](#filter)
+  - [IncludeList](#includelist)
+  - [OrderBy](#orderby)
 - [Paging](#paging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 ## Installation
 
 Adding the DataAccess Toolbox to a project is as easy as adding it to the project.json file :
 
 ``` json
  "dependencies": {
-    "Toolbox.DataAccess":  "1.6.1",
+    "Digipolis.DataAccess":  "2.0.0",
  }
 ```
 
@@ -50,194 +50,116 @@ Alternatively, it can also be added via the NuGet Package Manager interface.
 
 The DataAccess framework is registered in the _**ConfigureServices**_ method of the *Startup* class.
 
-There are 2 ways to configure the DataAccess framework :
-- using a json config file
-- using code
-
-### Json config file
-
-The path to the Json config file has to be given as argument to the _*AddDataAccess*_ method, together with the concrete type of your DbContext as generic parameter :
 
 ``` csharp
-services.AddDataAccess<MyEntityContext>(opt => opt.FileName = "configs/dbconfig./json");
-
+services.AddDataAccess<MyEntityContext>();
 ```
 
-If the DataAccess section in your json file is not named 'DataAccess' (=default), also pass in your custom section name :
-
-``` csharp
-services.AddDataAccess<MyEntityContext>(opt =>
-                                        {
-                                            opt.FileName = "configs/dbconfig./json";
-                                            opt.SectionName = "MyDataAccessSection";
-                                        });
-```
-
-The DataAccess framework will read the given section of the json file with the following structure :
-
-``` json
-{
-    "DataAccess": {
-        "ConnectionString": {
-            "Host": "localhost",
-            "Port": "1234",
-            "DbName": "dbname",
-            "User": "user",
-            "Password":  "pwd"
-        },
-        "LazyLoadingEnabled": false,
-        "PluralizeTableNames": false,
-        "DefaultSchema":  "schemaname",
-        "DisableCascadingDeletes":  false,
-        "UseLowercaseOnTablesAndFields":  false
-    }
-}
-```
-Port is optional. If it is included it must contain a valid port number (numeric value from 0 to 65535).
-PluralizeTableNames is optional, the default value is true.
-DefaultSchema is optional, the default value is "dbo".
-DisableCascadingDeletes is optional, the default value is false.
-UseLowercaseOnTablesAndFields is optional, the default value is false.
-
-
-### Code
-
-You can also call the _*AddDataAccess*_ method, passing in the needed options directly :
-
-``` csharp
-var connString = new ConnectionString("host", 1234, "dbname", "user", "pwd");
-services.AddDataAccess<MyEntityContext>(opt => opt.ConnectionString = connString);
-```
-
-When you don't need to specify a port in the connection string, pass 0 to it.  
+Next to this registration you will need to register entity framework separately.
 
 ### NpgSql
 
-If you use NpgSql, you must also pass in a DbConfiguration object that contains the Npgsql configuration :
+If you use NpgSql, you can use this entity framework configuration:
 
 ``` csharp
-public class PostgresDbConfiguration : DbConfiguration
-{
-    public PostgresDbConfiguration()
-    {
-        SetDefaultConnectionFactory( new Npgsql. NpgsqlConnectionFactory());
-        SetProviderFactory( "Npgsql", Npgsql.NpgsqlFactory .Instance);
-        SetProviderServices( "Npgsql", Npgsql.NpgsqlServices .Instance);
-    }
-}
+var connection = @"Server=127.0.0.1;Port=5432;Database=TestDB;User Id=postgres;Password=root;";
+services.AddDbContext<MyEntityContext>(options => options.UseNpgsql(connection));
 ```
 
-You can create this class yourself in your project, or you can include the Toolbox.DataAccess.Postgres package that contains this class.
+Check the Entity Framework documentation for more info on the configuration possibilities.
 
-In Startup.ConfigureServices :
-
-``` csharp
-var dbConfig = new PostgresDbConfiguration();
-
-var connString = new ConnectionString("host", 1234, "dbname", "user", "pwd");
-services.AddDataAccess<MyEntityContext>(opt =>
-                                        {
-                                            opt.ConnectionString = connString;
-                                            opt.DbConfiguration = dbConfig;
-                                        });
-
-// or when using a config file
-
-services.AddDataAccess<MyEntityContext>(opt =>
-                                        {
-                                            opt.FileName = "configs/dbconfig./json";
-                                            opt.DbConfiguration = dbConfig;
-                                        });
-```
 
 ## EntityContext
 
-You inherit a DbContext object from the EntityContextBase class in the toolbox. This context contains all your project-specific DbSets and custom logic.   
-The constructor has to accept an IOptions&lt;EntityContextOptions&gt; as input parameter, to be passed to the base constructor. This EntityContextOptions object is constructed from the DataAccess options, configured in the Startup class (see higher).
+You inherit a DbContext object from the EntityContextBase class in the toolbox. This context contains all your project-specific DbSets and custom logic.
+The constructor has to accept an DbContextOptions&lt;TContext&gt; as input parameter, to be passed to the base constructor and where TContext is the type of your context.
+The EntityContextBase is a generic type with your context as type parameter. This is necessary in order to pass the generic DbContextOptions object to the underlying DbContext constructor.
 
-For example :  
+For example :
 
 ``` csharp
-    public class EntityContext : EntityContextBase
+public class EntityContext : EntityContextBase<EntityContext>
+{
+    public EntityContext(DbContextOptions<EntityContext> options) : base(options)
+    { }
+
+    public DbSet<MyEntity>
+    MyEntities { get; set; }
+    public DbSet<MyOtherEntity>
+    MyOtherEntities { get; set; }
+
+    protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {
-        public EntityContext(IOptions<EntityContextOptions> options) : base(options)
-        { }
-
-        public DbSet<MyEntity> MyEntities { get; set; }
-        public DbSet<MyOtherEntity> MyOtherEntities { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-		{
-			// optional, see Entity Framework documentation
-		}
-	}
+        // optional, see Entity Framework documentation
+    }
+}
 ```
 
 ## Entities
 
-Your Entities are inherited from the base class EntityBase in the toolbox :  
+Your Entities are inherited from the base class EntityBase in the toolbox :
 
 ``` csharp
 public class MyEntity : EntityBase
 {
-    public string MyProperty { get; set; }    
+    public string MyProperty { get; set; }
 }
 ```
 
-The EntityBase class already contains an int property, named Id.    
+The EntityBase class already contains an int property, named Id.
 
 ## UnitOfWork
 
-The toolbox contains a UnitOfWork class and IUnitofWork interface that encapsulates the DbContext and that you use in your business classes to separate the data access code from business code.  
-The IUnitOfWork is instantiated by the IUowProvider.  
+The toolbox contains a UnitOfWork class and IUnitofWork interface that encapsulates the DbContext and that you use in your business classes to separate the data access code from business code.
+The IUnitOfWork is instantiated by the IUowProvider.
 
-First inject the IUowProvider in your business class :  
+First inject the IUowProvider in your business class :
 
-``` csharp  
+``` csharp
 public class BusinessClass
 {
-   public BusinessClass(IUowProvider uowProvider)
-   {
-       _uowProvider = uowProvider;
-   }
+    public BusinessClass(IUowProvider uowProvider)
+    {
+        _uowProvider = uowProvider;
+    }
 
-   private readonly IUowProvider _uowProvider;
+    private readonly IUowProvider _uowProvider;
 }
 ```
 
-Then ask the IUowProvider for a IUnitOfWork :  
+Then ask the IUowProvider for a IUnitOfWork :
 
-``` csharp  
+``` csharp
 using ( var uow = _uowProvider.CreateUnitOfWork() )
 {
-   // your business logic that needs dataaccess comes here   
+    // your business logic that needs dataaccess comes here
 }
 ```
 
-You can pass in false if you don't want the change tracking to activate (better performance when you only want to retrieve data and not insert/update/delete).  
+You can pass in false if you don't want the change tracking to activate (better performance when you only want to retrieve data and not insert/update/delete).
 
-Now Access your data via repositories :    
+Now Access your data via repositories :
 
-``` csharp  
+``` csharp
 var repository = uow.GetRepository<MyEntity>();
 // your data access code via the repository comes here
-```  
+```
 
-The UnitOfWork will be automatically injected in the repository and use it to interact with the database.  
+The UnitOfWork will be automatically injected in the repository and use it to interact with the database.
 
-When you want to submit changes to the database, call the SaveChanges or SaveChangesAsync method of the IUnitOfWork :  
+When you want to submit changes to the database, call the SaveChanges or SaveChangesAsync method of the IUnitOfWork :
 
-``` csharp  
+``` csharp
 uow.SaveChanges();
-```  
+```
 
 ## Repositories
 
-The toolbox registers generic repositories in the ASP.NET 5 DI container. They provide the following methods :    
+The toolbox registers generic repositories in the ASP.NET 5 DI container. They provide the following methods :
 
 ### Get and GetAsync
 
-Retrieve a single record by id, optionally passing in an IncludeList of child entities that you also want retrieved :  
+Retrieve a single record by id, optionally passing in an IncludeList of child entities that you also want retrieved :
 
 ``` csharp
 using (var uow = _uowProvider.CreateUnitOfWork())
@@ -257,13 +179,13 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 
 Retrieves all records, with or without child records.
 
-``` csharp  
+``` csharp
 using (var uow = _uowProvider.CreateUnitOfWork(false))
 {
     var repository = uow.GetRepository<MyEntity>();
     var entities = repository.GetAll(includes: includes);
 }
-```  
+```
 
 ### Add
 
@@ -282,31 +204,34 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 
 Updates an existing record.
 
-``` csharp  
+Important note! When you update an entity with children objects, these child objects will also be updated. There is no need to update al the child objects separately.
+This is a new behaviour from the entity framework core **update** method on the DbSet.
+
+``` csharp
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
     var repository = uow.GetRepository<MyEntity>();
     repository.Update(updatedEntity);
     await uow.SaveChangesAsync();
 }
-```  
+```
 
 ### Remove
 
-You can call this method with an existing entity :  
+You can call this method with an existing entity :
 
-``` csharp  
+``` csharp
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
     var repository = uow.GetRepository<MyEntity>();
     repository.Remove(existingEntity);
     await uow.SaveChangesAsync();
 }
-```  
+```
 
-Or with the Id of an existing entity :  
+Or with the Id of an existing entity :
 
-``` csharp  
+``` csharp
 using (var uow = _uowProvider.CreateUnitOfWork())
 {
     var repository = uow.GetRepository<MyEntity>();
@@ -317,12 +242,12 @@ using (var uow = _uowProvider.CreateUnitOfWork())
 
 ### Custom Repositories
 
-When you need more functionality in a repository than the generic methods, you can create our own repositories by inheriting from the repository base classes.  
+When you need more functionality in a repository than the generic methods, you can create our own repositories by inheriting from the repository base classes.
 
 To make a repository that is tied to 1 entity type, you inherit from the _**EntityRepositoryBase**_ class :
 
 ``` csharp
-public class MyRepository<MyEntity> : EntityRepositoryBase<MyDbContext, MyEntity>, IMyRepository
+public class MyRepository<MyEntity> : EntityRepositoryBase<MyDbContext, MyEntity> , IMyRepository
 {
     public MyRepository(ILogger logger) : base(logger, null)
     { }
@@ -354,19 +279,20 @@ These helpers help generating queries:
 A Filter holds the requested filter (WHERE) values.
 
 ``` csharp
-
 List<`Participant`> participants = null;
 
-        using (var uow = _uowProvider.CreateUnitOfWork(false))
-        {
-            Filter<Entities.Participant> filter = new Filter<Entities.Participant>(null);
+using (var uow = _uowProvider.CreateUnitOfWork(false))
+{
+    Filter<Entities.Participant>
+    filter = new Filter<Entities.Participant>
+    (null);
 
-            filter.AddExpression(e => idList.Contains(e.Id));
+    filter.AddExpression(e => idList.Contains(e.Id));
 
-            var repository = uow.GetRepository<IRepository<Participant>>();
+    var repository = uow.GetRepository<IRepository<Participant>>();
 
-            participants = (await repository.QueryAsync(filter.Expression, includes:includes)).ToList();
-        }
+    participants = (await repository.QueryAsync(filter.Expression, includes:includes)).ToList();
+}
 ```
 
 ### IncludeList
@@ -385,9 +311,9 @@ var orderBy = new OrderBy<Entities.Participant>(string.IsNullOrEmpty(paging.Sort
 ## Paging
 
 When working with large collections of data you'll want to keep your application performant. Instead of retrieving all records, you can serve your data
-to the consumer in pages.  
+to the consumer in pages.
 
-The repositories have methods that can be used with paging systems. You can also inject a IDataPager object in your classes to retrieve paged data :  
+The repositories have methods that can be used with paging systems. You can also inject a IDataPager object in your classes to retrieve paged data :
 
 ``` csharp
 public class MyBusinessClass

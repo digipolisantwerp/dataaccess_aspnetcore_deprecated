@@ -1,6 +1,6 @@
 {
 	"version": "1.0.0",
-	"name": "Toolbox.DataAccess",
+	"name": "Digipolis.DataAccess",
 	"private": true,
 	"devDependencies": {
 		"gulp": "3.9.0",
