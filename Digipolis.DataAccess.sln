@@ -21,6 +21,10 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.DataAccess.UnitTe
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.DataAccess", "src\Digipolis.DataAccess\Digipolis.DataAccess.xproj", "{9EA166E6-D15B-453F-A68E-8119BC472933}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D3A85B77-BCBF-455F-9882-A63809F8F8B0}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataAccess.SampleApp", "samples\DataAccess.SampleApp\DataAccess.SampleApp.xproj", "{C5A387B7-1E4A-441F-9571-389A76710710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,10 @@ Global
 		{9EA166E6-D15B-453F-A68E-8119BC472933}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EA166E6-D15B-453F-A68E-8119BC472933}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EA166E6-D15B-453F-A68E-8119BC472933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5A387B7-1E4A-441F-9571-389A76710710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5A387B7-1E4A-441F-9571-389A76710710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5A387B7-1E4A-441F-9571-389A76710710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5A387B7-1E4A-441F-9571-389A76710710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +50,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FF0474FF-5844-4B0A-8B7B-47AC592BDE03} = {263D749B-EEBE-4B2A-B79A-B162BAB68E24}
 		{9EA166E6-D15B-453F-A68E-8119BC472933} = {3D5D0B67-478E-4734-83F5-9D9F612E5661}
+		{C5A387B7-1E4A-441F-9571-389A76710710} = {D3A85B77-BCBF-455F-9882-A63809F8F8B0}
 	EndGlobalSection
 EndGlobal

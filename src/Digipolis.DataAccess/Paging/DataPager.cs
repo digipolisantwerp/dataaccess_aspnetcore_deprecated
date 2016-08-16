@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Digipolis.DataAccess.Entities;
+﻿using Digipolis.DataAccess.Entities;
 using Digipolis.DataAccess.Query;
-using Digipolis.DataAccess.Repositories;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Digipolis.DataAccess.Paging
 {
@@ -15,7 +15,7 @@ namespace Digipolis.DataAccess.Paging
 
         private readonly IUowProvider _uowProvider;
 
-        public DataPage<TEntity> Get(int pageNumber, int pageLength, OrderBy<TEntity> orderby = null, IncludeList<TEntity> includes = null)
+        public DataPage<TEntity> Get(int pageNumber, int pageLength, OrderBy<TEntity> orderby = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
         {
             using ( var uow = _uowProvider.CreateUnitOfWork(false) )
             {
@@ -32,7 +32,7 @@ namespace Digipolis.DataAccess.Paging
             }
         }
 
-        public async Task<DataPage<TEntity>> GetAsync(int pageNumber, int pageLength, OrderBy<TEntity> orderby = null, IncludeList<TEntity> includes = null)
+        public async Task<DataPage<TEntity>> GetAsync(int pageNumber, int pageLength, OrderBy<TEntity> orderby = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
         {
             using ( var uow = _uowProvider.CreateUnitOfWork(false) )
             {
@@ -49,7 +49,7 @@ namespace Digipolis.DataAccess.Paging
             }
         }
 
-        public DataPage<TEntity> Query(int pageNumber, int pageLength, Filter<TEntity> filter, OrderBy<TEntity> orderby = null, IncludeList<TEntity> includes = null)
+        public DataPage<TEntity> Query(int pageNumber, int pageLength, Filter<TEntity> filter, OrderBy<TEntity> orderby = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
         {
             using ( var uow = _uowProvider.CreateUnitOfWork(false) )
             {
@@ -66,7 +66,7 @@ namespace Digipolis.DataAccess.Paging
             }
         }
 
-        public async Task<DataPage<TEntity>> QueryAsync(int pageNumber, int pageLength, Filter<TEntity> filter, OrderBy<TEntity> orderby = null, IncludeList<TEntity> includes = null)
+        public async Task<DataPage<TEntity>> QueryAsync(int pageNumber, int pageLength, Filter<TEntity> filter, OrderBy<TEntity> orderby = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
         {
             using ( var uow = _uowProvider.CreateUnitOfWork(false) )
             {

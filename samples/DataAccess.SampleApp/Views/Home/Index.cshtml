@@ -1,0 +1,23 @@
+﻿@model IEnumerable<DataAccess.SampleApp.Entities.Building>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <h2>Overview</h2>
+        @foreach (var building in Model)
+        {
+            <div>Building name: @building.Name</div>
+            @foreach (var appartment in building.Appartments)
+            {
+                <div style="padding-left:15px">Appartment number: @appartment.Number</div>
+                @foreach (var room in appartment.Rooms)
+                {
+                    <div style="padding-left:30px">Room name: @room.Name</div>
+                }
+            }
+        }
+    </div>
+</div>

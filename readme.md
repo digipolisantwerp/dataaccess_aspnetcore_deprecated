@@ -14,6 +14,7 @@ It contains :
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Installation](#installation)
 - [Configuration in Startup.ConfigureServices](#configuration-in-startupconfigureservices)
   - [NpgSql](#npgsql)
@@ -29,7 +30,7 @@ It contains :
   - [Custom Repositories](#custom-repositories)
 - [Query](#query)
   - [Filter](#filter)
-  - [IncludeList](#includelist)
+  - [Includes](#includes)
   - [OrderBy](#orderby)
 - [Paging](#paging)
 
@@ -40,7 +41,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "2.0.0",
+    "Digipolis.DataAccess":  "2.1.0",
  }
 ```
 
@@ -295,9 +296,20 @@ using (var uow = _uowProvider.CreateUnitOfWork(false))
 }
 ```
 
-### IncludeList
-An includelist is a  list of child entities that you want to include in when executing your query.
-[Refer to Get and GetAsync section](#Get-and-GetAsync)
+### Includes
+Holds the parameters to generate the Include part of the query.
+
+``` csharp
+
+var includes = new Includes<Building>(query =>
+{
+    return query.Include(b => b.Appartments)
+                    .ThenInclude(a => a.Rooms);
+}); 
+
+buildings = await repository.GetAllAsync(null, includes.Expression);
+
+```
 
 ### OrderBy
 Holds the parameters to generate the OrderBy part of the query.

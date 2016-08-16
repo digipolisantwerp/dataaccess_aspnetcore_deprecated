@@ -1,0 +1,9 @@
+{
+  "ConnectionString": {
+    "Host": "localhost",
+    "Port": "5432",
+    "DbName": "data_access_sample_app",
+    "User": "postgres",
+    "Password": "postgres"
+  }
+}

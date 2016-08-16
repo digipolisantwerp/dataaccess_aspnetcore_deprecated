@@ -22,3 +22,7 @@
 ## 2.0.0
 
 - Upgrade to dotnet core 1.0.0
+
+## 2.1.0
+
+- Changed include functionality
