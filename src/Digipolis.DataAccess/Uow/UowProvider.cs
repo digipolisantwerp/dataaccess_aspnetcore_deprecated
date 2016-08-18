@@ -7,11 +7,8 @@ namespace Digipolis.DataAccess.Uow
 {
     public class UowProvider : IUowProvider
     {
-
         public UowProvider()
-        {
-
-        }
+        { }
 
         public UowProvider(ILogger<DataAccess> logger, IServiceProvider serviceProvider)
         {
@@ -22,11 +19,14 @@ namespace Digipolis.DataAccess.Uow
         private readonly ILogger _logger;
         private readonly IServiceProvider _serviceProvider;
         
-        public IUnitOfWork CreateUnitOfWork(bool autoDetectChanges = true, bool enableLogging = false)
+        public IUnitOfWork CreateUnitOfWork(bool trackChanges = true, bool enableLogging = false)
         {
             var _context = (DbContext)_serviceProvider.GetService(typeof(IEntityContext));
-            _context.ChangeTracker.AutoDetectChangesEnabled = autoDetectChanges;
 
+            if ( !trackChanges )
+                _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            // -- Not (yet) implemented in EF Core -- //
             //if (enableLogging)
             //{
             //    _context.Database.Log = (msg) => _logger.LogVerbose(msg);
