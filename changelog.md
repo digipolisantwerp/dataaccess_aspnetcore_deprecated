@@ -26,3 +26,7 @@
 ## 2.1.0
 
 - Changed include functionality
+
+## 2.2.0
+
+- NoTracking behaviour

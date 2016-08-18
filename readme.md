@@ -41,7 +41,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "2.1.0",
+    "Digipolis.DataAccess":  "2.2.0",
  }
 ```
 
@@ -63,11 +63,11 @@ Next to this registration you will need to register entity framework separately.
 If you use NpgSql, you can use this entity framework configuration:
 
 ``` csharp
-var connection = @"Server=127.0.0.1;Port=5432;Database=TestDB;User Id=postgres;Password=root;";
+var connection = @"Server=127.0.0.1;Port=5432;Database=TestDB;User Id=postgres;Password=mypwd;";
 services.AddDbContext<MyEntityContext>(options => options.UseNpgsql(connection));
 ```
 
-Check the Entity Framework documentation for more info on the configuration possibilities.
+Check the [Entity Framework documentation](https://ef.readthedocs.io/en/latest/) for more info on the configuration possibilities.
 
 
 ## EntityContext
@@ -137,18 +137,18 @@ using ( var uow = _uowProvider.CreateUnitOfWork() )
 }
 ```
 
-You can pass in false if you don't want the change tracking to activate (better performance when you only want to retrieve data and not insert/update/delete).
+You can pass in false if you don't want the **change tracking** to activate (better performance when you only want to retrieve data and not insert/update/delete).
 
-Now Access your data via repositories :
+Now access your data via repositories :
 
 ``` csharp
 var repository = uow.GetRepository<MyEntity>();
 // your data access code via the repository comes here
 ```
 
-The UnitOfWork will be automatically injected in the repository and use it to interact with the database.
+The UnitOfWork will be automatically injected in the repository and used to interact with the database.
 
-When you want to submit changes to the database, call the SaveChanges or SaveChangesAsync method of the IUnitOfWork :
+To persist your changes to the database, call the SaveChanges or SaveChangesAsync method of the IUnitOfWork :
 
 ``` csharp
 uow.SaveChanges();
@@ -156,7 +156,7 @@ uow.SaveChanges();
 
 ## Repositories
 
-The toolbox registers generic repositories in the ASP.NET 5 DI container. They provide the following methods :
+The toolbox registers generic repositories in the ASP.NET Core DI container. They provide the following methods :
 
 ### Get and GetAsync
 

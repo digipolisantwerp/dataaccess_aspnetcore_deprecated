@@ -2,6 +2,6 @@
 {
     public interface IUowProvider
     {
-        IUnitOfWork CreateUnitOfWork(bool autoDetectChanges = true, bool enableLogging = false);
+        IUnitOfWork CreateUnitOfWork(bool trackChanges = true, bool enableLogging = false);
     }
 }
