@@ -30,3 +30,7 @@
 ## 2.2.0
 
 - NoTracking behaviour
+
+## 2.2.1
+
+- Bugfix includes with Get and GetAsync
