@@ -61,16 +61,22 @@ namespace Digipolis.DataAccess.Repositories
 		{
 			IQueryable<TEntity> query = Context.Set<TEntity>();
 
-            includes?.Invoke(query);
+            if (includes != null)
+            {
+                query = includes(query);
+            }
 
-			return query.SingleOrDefault(x => x.Id == id);
+            return query.SingleOrDefault(x => x.Id == id);
 		}
 
 		public virtual Task<TEntity> GetAsync(int id, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
 		{
 			IQueryable<TEntity> query = Context.Set<TEntity>();
 
-            includes?.Invoke(query);
+            if (includes != null)
+            {
+                query = includes(query);
+            }
 
             return query.SingleOrDefaultAsync(x => x.Id == id);
 		}
@@ -163,7 +169,7 @@ namespace Digipolis.DataAccess.Repositories
 			return query.CountAsync();
 		}
 
-        protected IQueryable<TEntity> QueryDb(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeAction)
+        protected IQueryable<TEntity> QueryDb(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes)
         {
             IQueryable<TEntity> query = Context.Set<TEntity>();
 
@@ -172,9 +178,9 @@ namespace Digipolis.DataAccess.Repositories
                 query = query.Where(filter);
             }
 
-            if (includeAction != null)
+            if (includes != null)
             {
-                query = includeAction(query);
+                query = includes(query);
             }
 
             if (orderBy != null)
