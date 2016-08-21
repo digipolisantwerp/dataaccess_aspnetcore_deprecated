@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Digipolis.DataAccess.Paging
 {
-    public class DataPager<TEntity> : IDataPager<TEntity> where TEntity : EntityBase
+    public class DataPager<TEntity> : IDataPager<TEntity>
     {
         public DataPager(IUowProvider uowProvider)
         {

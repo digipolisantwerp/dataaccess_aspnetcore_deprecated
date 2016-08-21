@@ -4,7 +4,7 @@ using Digipolis.DataAccess.Entities;
 
 namespace Digipolis.DataAccess.Query
 {
-	public class Filter<TEntity> where TEntity : EntityBase
+	public class Filter<TEntity>
 	{
 		public Filter(Expression<Func<TEntity, bool>> expression)
 		{

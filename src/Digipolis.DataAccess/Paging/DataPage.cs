@@ -4,7 +4,7 @@ using Digipolis.DataAccess.Entities;
 
 namespace Digipolis.DataAccess.Paging
 {
-    public class DataPage<TEntity> where TEntity : EntityBase
+    public class DataPage<TEntity>
     {
         public IEnumerable<TEntity> Data { get; set; }
         public long TotalEntityCount { get; set; }
