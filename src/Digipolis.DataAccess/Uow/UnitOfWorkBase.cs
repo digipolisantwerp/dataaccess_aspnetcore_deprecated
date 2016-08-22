@@ -37,7 +37,7 @@ namespace Digipolis.DataAccess.Uow
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
+        public IRepository<TEntity> GetRepository<TEntity>()
         {
             CheckDisposed();
             var repositoryType = typeof(IRepository<TEntity>);

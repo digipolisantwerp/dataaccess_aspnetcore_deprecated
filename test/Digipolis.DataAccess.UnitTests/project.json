@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Unit tests for the DataAccess toolbox",
   "authors": [ "digipolis.be" ],
@@ -7,7 +7,8 @@
     "Digipolis.DataAccess": "*",
     "NETStandard.Library": "1.6.0",
     "xunit": "2.2.0-beta2-build3300",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Microsoft.EntityFrameworkCore.InMemory": "1.0.0"
   },
   "frameworks": {
     "netcoreapp1.0": {

@@ -34,3 +34,8 @@
 ## 2.2.1
 
 - Bugfix includes with Get and GetAsync
+
+## 2.3.0
+
+- Removed EntityBase constraint on multiple generic interfaces and classes.
+- Added PageNumber, PageLength and TotalPageCount and renamed TotalCount to TotalEntityCount on DataPage class

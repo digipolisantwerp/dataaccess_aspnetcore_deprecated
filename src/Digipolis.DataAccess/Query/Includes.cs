@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Digipolis.DataAccess.Query
 {
-    public class Includes<TEntity> where TEntity : EntityBase
+    public class Includes<TEntity>
     {
         public Includes(Func<IQueryable<TEntity>, IQueryable<TEntity>> expression)
         {
