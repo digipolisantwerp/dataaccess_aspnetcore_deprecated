@@ -1,12 +1,13 @@
 ﻿using Digipolis.DataAccess.Entities;
 using Digipolis.DataAccess.Query;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Digipolis.DataAccess.Paging
 {
-    public class DataPager<TEntity> : IDataPager<TEntity> where TEntity : EntityBase
+    public class DataPager<TEntity> : IDataPager<TEntity>
     {
         public DataPager(IUowProvider uowProvider)
         {
@@ -22,13 +23,10 @@ namespace Digipolis.DataAccess.Paging
                 var repository = uow.GetRepository<TEntity>();
 
                 var startRow = ( pageNumber - 1 ) * pageLength;
-                var page = new DataPage<TEntity>()
-                {
-                    Data = repository.GetPage(startRow, pageLength, includes: includes, orderBy: orderby?.Expression),
-                    TotalCount = repository.Count()
-                };
+                var data = repository.GetPage(startRow, pageLength, includes: includes, orderBy: orderby?.Expression);
+                var totalCount = repository.Count();
 
-                return page;
+                return CreateDataPage(pageNumber, pageLength, data, totalCount);
             }
         }
 
@@ -39,13 +37,10 @@ namespace Digipolis.DataAccess.Paging
                 var repository = uow.GetRepository<TEntity>();
 
                 var startRow = ( pageNumber - 1 ) * pageLength;
-                var page = new DataPage<TEntity>()
-                {
-                    Data = await repository.GetPageAsync(startRow, pageLength, includes: includes, orderBy: orderby?.Expression),
-                    TotalCount = await repository.CountAsync()
-                };
+                var data = await repository.GetPageAsync(startRow, pageLength, includes: includes, orderBy: orderby?.Expression);
+                var totalCount = await repository.CountAsync();
 
-                return page;
+                return CreateDataPage(pageNumber, pageLength, data, totalCount);
             }
         }
 
@@ -56,13 +51,10 @@ namespace Digipolis.DataAccess.Paging
                 var repository = uow.GetRepository<TEntity>();
 
                 var startRow = ( pageNumber - 1 ) * pageLength;
-                var page = new DataPage<TEntity>()
-                {
-                    Data = repository.QueryPage(startRow, pageLength, filter.Expression, includes: includes, orderBy: orderby?.Expression),
-                    TotalCount = repository.Count(filter.Expression)
-                };
+                var data = repository.QueryPage(startRow, pageLength, filter.Expression, includes: includes, orderBy: orderby?.Expression);
+                var totalCount = repository.Count(filter.Expression);
 
-                return page;
+                return CreateDataPage(pageNumber, pageLength, data, totalCount);
             }
         }
 
@@ -73,14 +65,24 @@ namespace Digipolis.DataAccess.Paging
                 var repository = uow.GetRepository<TEntity>();
 
                 var startRow = ( pageNumber - 1 ) * pageLength;
-                var page = new DataPage<TEntity>()
-                {
-                    Data = await repository.QueryPageAsync(startRow, pageLength, filter.Expression, includes: includes, orderBy: orderby?.Expression),
-                    TotalCount = await repository.CountAsync(filter.Expression)
-                };
+                var data = await repository.QueryPageAsync(startRow, pageLength, filter.Expression, includes: includes, orderBy: orderby?.Expression);
+                var totalCount = await repository.CountAsync(filter.Expression);
 
-                return page;
+                return CreateDataPage(pageNumber, pageLength, data, totalCount);
             }
+        }
+
+        private DataPage<TEntity> CreateDataPage(int pageNumber, int pageLength, IEnumerable<TEntity> data, long totalEntityCount)
+        {
+            var page = new DataPage<TEntity>()
+            {
+                Data = data,
+                TotalEntityCount = totalEntityCount,
+                PageLength = pageLength,
+                PageNumber = pageNumber
+            };
+
+            return page;
         }
     }
 }

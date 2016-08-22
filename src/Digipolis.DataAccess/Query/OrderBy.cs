@@ -7,7 +7,7 @@ using Digipolis.DataAccess.Entities;
 
 namespace Digipolis.DataAccess.Query
 {
-    public class OrderBy<TEntity> where TEntity : EntityBase
+    public class OrderBy<TEntity>
 	{
 		public OrderBy(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> expression)
 		{

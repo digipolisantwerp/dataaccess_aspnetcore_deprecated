@@ -41,7 +41,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "2.2.1",
+    "Digipolis.DataAccess":  "2.3.0",
  }
 ```
 

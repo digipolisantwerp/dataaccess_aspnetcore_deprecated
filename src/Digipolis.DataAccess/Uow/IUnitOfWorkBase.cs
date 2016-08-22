@@ -12,7 +12,7 @@ namespace Digipolis.DataAccess.Uow
         Task<int> SaveChangesAsync();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
-        IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase;
+        IRepository<TEntity> GetRepository<TEntity>();
         TRepository GetCustomRepository<TRepository>();
     }
 }
