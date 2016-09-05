@@ -145,7 +145,31 @@ namespace Digipolis.DataAccess.Repositories
 			this.Remove(entity);
 		}
 
-		public virtual int Count(Expression<Func<TEntity, bool>> filter = null)
+        public virtual bool Any(Expression<Func<TEntity, bool>> filter = null)
+        {
+            IQueryable<TEntity> query = Context.Set<TEntity>();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            return query.Any();
+        }
+
+        public virtual Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter = null)
+        {
+            IQueryable<TEntity> query = Context.Set<TEntity>();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            return query.AnyAsync();
+        }
+
+        public virtual int Count(Expression<Func<TEntity, bool>> filter = null)
 		{
 			IQueryable<TEntity> query = Context.Set<TEntity>();
 

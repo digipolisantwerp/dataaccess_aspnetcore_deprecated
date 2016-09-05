@@ -222,5 +222,36 @@ namespace Digipolis.DataAccess.UnitTests.Repositories
             for (int i = minId; i <= maxId; i++)
                 Assert.Equal(1, result.Count(x => x.Id == i));
         }
+
+        [Theory]
+        [InlineData(10, 1)]
+        [InlineData(10, 5)]
+        [InlineData(10, 10)]
+        public void AnyByIdReturnsTrueForExistingRecord(int totalEntities, int id)
+        {
+            // Arrange
+            AddEntitiesToContext(totalEntities);
+
+            // Act
+            var result = _fooRepository.Any(x => x.Id == id);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Theory]
+        [InlineData(10, 0)]
+        [InlineData(10, 11)]
+        public void AnyByIdReturnsFalseForNonExistingRecord(int totalEntities, int id)
+        {
+            // Arrange
+            AddEntitiesToContext(totalEntities);
+
+            // Act
+            var result = _fooRepository.Any(x => x.Id == id);
+
+            // Assert
+            Assert.False(result);
+        }
     }
 }

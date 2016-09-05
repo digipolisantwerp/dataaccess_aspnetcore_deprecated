@@ -41,7 +41,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "2.3.0",
+    "Digipolis.DataAccess":  "2.3.1",
  }
 ```
 
@@ -185,6 +185,18 @@ using (var uow = _uowProvider.CreateUnitOfWork(false))
 {
     var repository = uow.GetRepository<MyEntity>();
     var entities = repository.GetAll(includes: includes);
+}
+```
+
+### Any and AnyAsync
+
+Checks if at least one record exists with the provided filter.
+
+``` csharp
+using (var uow = _uowProvider.CreateUnitOfWork(false))
+{
+    var repository = uow.GetRepository<MyEntity>();
+    bool exists = repository.Any(filter: filter);
 }
 ```
 
