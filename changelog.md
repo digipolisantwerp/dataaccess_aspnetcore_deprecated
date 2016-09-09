@@ -43,3 +43,7 @@
 ## 2.3.1
 
 - Added Any and AnyAsync methods to Repository
+
+## 2.4.0
+
+- Added ModelBuilder extensions
