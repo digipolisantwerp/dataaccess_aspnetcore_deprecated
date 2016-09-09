@@ -39,3 +39,11 @@
 
 - Removed EntityBase constraint on multiple generic interfaces and classes.
 - Added PageNumber, PageLength and TotalPageCount and renamed TotalCount to TotalEntityCount on DataPage class
+
+## 2.3.1
+
+- Added Any and AnyAsync methods to Repository
+
+## 2.4.0
+
+- Added ModelBuilder extensions

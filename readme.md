@@ -5,6 +5,7 @@ The DataAccess Toolbox contains the base classes for data access in ASP.NET Core
 It contains :
 - base classes for entities.
 - base classes for repositories.
+- generic repositories.
 - unit-of-work and repository pattern.
 (- automatic discovery of repositories -- not yet)
 
@@ -19,11 +20,15 @@ It contains :
 - [Configuration in Startup.ConfigureServices](#configuration-in-startupconfigureservices)
   - [NpgSql](#npgsql)
 - [EntityContext](#entitycontext)
+- [ModelBuilder extensions](#modelbuilder-extensions)
+  - [Set all table- and field-names to lowercase](#set-all-table--and-field-names-to-lowercase)
+  - [Disable cascading deletes](#disable-cascading-deletes)
 - [Entities](#entities)
 - [UnitOfWork](#unitofwork)
 - [Repositories](#repositories)
   - [Get and GetAsync](#get-and-getasync)
   - [GetAll and GetAllAsync](#getall-and-getallasync)
+  - [Any and AnyAsync](#any-and-anyasync)
   - [Add](#add)
   - [Update](#update)
   - [Remove](#remove)
@@ -41,7 +46,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "2.3.0",
+    "Digipolis.DataAccess":  "2.4.0",
  }
 ```
 
@@ -60,7 +65,7 @@ Next to this registration you will need to register entity framework separately.
 
 ### NpgSql
 
-If you use NpgSql, you can use this entity framework configuration:
+If you use NpgSql, you can for example use this entity framework configuration:
 
 ``` csharp
 var connection = @"Server=127.0.0.1;Port=5432;Database=TestDB;User Id=postgres;Password=mypwd;";
@@ -96,6 +101,33 @@ public class EntityContext : EntityContextBase<EntityContext>
 }
 ```
 
+## ModelBuilder extensions
+
+Sometimes you want more control over the way the database structure is layed out (e.g. you are bound by rules set by the database administrators), other times you might already have a database in place and you can't change the structure. 
+The EF ModelBuilder allows you to control the mapping of the CLR types to the database schema. The following extensions give you extra possibilities that are not included in the standard Entity Framework libraries.
+
+### Set all table- and field-names to lowercase 
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
+
+    modelBuilder.LowerCaseTablesAndFields();
+}
+```  
+
+### Disable cascading deletes
+
+```csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
+
+    modelBuilder.DisableCascadingDeletes();
+}
+```  
+
 ## Entities
 
 Your Entities are inherited from the base class EntityBase in the toolbox :
@@ -107,7 +139,7 @@ public class MyEntity : EntityBase
 }
 ```
 
-The EntityBase class already contains an int property, named Id.
+The EntityBase class already contains an int property, named Id that can be used as primary key.
 
 ## UnitOfWork
 
@@ -185,6 +217,18 @@ using (var uow = _uowProvider.CreateUnitOfWork(false))
 {
     var repository = uow.GetRepository<MyEntity>();
     var entities = repository.GetAll(includes: includes);
+}
+```
+
+### Any and AnyAsync
+
+Checks if at least one record exists with the provided filter.
+
+``` csharp
+using (var uow = _uowProvider.CreateUnitOfWork(false))
+{
+    var repository = uow.GetRepository<MyEntity>();
+    bool exists = repository.Any(filter: filter);
 }
 ```
 

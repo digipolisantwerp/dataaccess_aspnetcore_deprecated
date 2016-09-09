@@ -34,7 +34,10 @@ namespace Digipolis.DataAccess.Repositories
 		void Remove(TEntity entity);
 		void Remove(int id);
 
-		int Count(Expression<Func<TEntity, bool>> filter = null);
+        bool Any(Expression<Func<TEntity, bool>> filter = null);
+        Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter = null);
+
+        int Count(Expression<Func<TEntity, bool>> filter = null);
 		Task<int> CountAsync(Expression<Func<TEntity, bool>> filter = null);
 
         void SetUnchanged(TEntity entitieit);
