@@ -26,13 +26,18 @@ namespace Digipolis.DataAccess.Uow
             if ( !trackChanges )
                 _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
-            // -- Not (yet) implemented in EF Core -- //
-            //if (enableLogging)
-            //{
-            //    _context.Database.Log = (msg) => _logger.LogVerbose(msg);
-            //}
-
             var uow = new UnitOfWork(_context, _serviceProvider);
+            return uow;
+        }
+
+        public IUnitOfWork CreateUnitOfWork<TEntityContext>(bool trackChanges = true, bool enableLogging = false) where TEntityContext : DbContext
+        {
+            var _context = (TEntityContext)_serviceProvider.GetService(typeof(IEntityContext));
+
+            if (!trackChanges)
+                _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+            var uow = new UnitOfWorkBase<TEntityContext>(_context, _serviceProvider);
             return uow;
         }
     }

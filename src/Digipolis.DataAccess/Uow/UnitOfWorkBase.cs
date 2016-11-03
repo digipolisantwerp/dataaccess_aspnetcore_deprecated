@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Digipolis.DataAccess.Uow
 {
-    public abstract class UnitOfWorkBase<TContext> : IUnitOfWorkBase where TContext : DbContext
+    public class UnitOfWorkBase<TContext> : IUnitOfWork where TContext : DbContext
     {
         protected internal UnitOfWorkBase(TContext context, IServiceProvider serviceProvider)
         {
@@ -61,7 +61,15 @@ namespace Digipolis.DataAccess.Uow
                 throw new RepositoryNotFoundException(repositoryType.Name, String.Format("Repository {0} not found in the IOC container. Check if it is registered during startup.", repositoryType.Name));
             }
 
-            ((IRepositoryInjection<TContext>)repository).SetContext(_context);
+            try
+            {
+                ((IRepositoryInjection<TContext>)repository).SetContext(_context);
+            }
+            catch (InvalidCastException ex)
+            {
+                throw new InvalidCastException($"{ex.Message}, try creating your unit of work using the generic CreateUnitOfWork method.", ex);
+            }
+            
             return repository;
         }
 

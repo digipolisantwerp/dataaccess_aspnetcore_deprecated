@@ -47,3 +47,7 @@
 ## 2.4.0
 
 - Added ModelBuilder extensions
+
+## 2.5.0
+
+- Bugfix invalid cast exception when using GetCustomRepository
