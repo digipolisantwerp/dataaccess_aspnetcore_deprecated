@@ -21,6 +21,7 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
     "Npgsql.EntityFrameworkCore.PostgreSQL": "1.0.1",
+    "Microsoft.EntityFrameworkCore.Design": "1.0.0-preview2-final",
     "Digipolis.DataAccess": "*"
   },
 

@@ -21,6 +21,7 @@ namespace DataAccess.SampleApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            //await Seed();
             IEnumerable<Building> buildings = null;
 
             using (var uow = _uowProvider.CreateUnitOfWork())
@@ -35,9 +36,10 @@ namespace DataAccess.SampleApp.Controllers
                                     .ThenInclude(a => a.Rooms);
                 });
 
-                //buildings = await repository.GetAllAsync(null, includes.Expression);
+                buildings = await repository.GetAllAsync(null, includes.Expression);
 
-                var building = await repository.GetAsync(1, includes.Expression);
+                //var building = await repository.GetAsync(1, includes.Expression);
+
                 //**************************************
 
                 //Func<IQueryable<Building>, IQueryable<Building>> func = query =>
@@ -55,6 +57,8 @@ namespace DataAccess.SampleApp.Controllers
                 //    return query.Include(b => b.Appartments)
                 //                    .ThenInclude(a => a.Rooms);
                 //});
+
+
             }
 
             return View(buildings);
