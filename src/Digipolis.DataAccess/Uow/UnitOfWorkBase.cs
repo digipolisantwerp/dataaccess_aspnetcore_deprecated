@@ -47,7 +47,7 @@ namespace Digipolis.DataAccess.Uow
 				throw new RepositoryNotFoundException(repositoryType.Name, String.Format("Repository {0} not found in the IOC container. Check if it is registered during startup.", repositoryType.Name));
 			}
 
-            ((IRepositoryInjection<TContext>)repository).SetContext(_context);
+            ((IRepositoryInjection)repository).SetContext(_context);
             return repository;
         }
 
@@ -61,7 +61,7 @@ namespace Digipolis.DataAccess.Uow
                 throw new RepositoryNotFoundException(repositoryType.Name, String.Format("Repository {0} not found in the IOC container. Check if it is registered during startup.", repositoryType.Name));
             }
 
-            ((IRepositoryInjection<TContext>)repository).SetContext(_context);
+            ((IRepositoryInjection)repository).SetContext(_context);
             return repository;
         }
 
