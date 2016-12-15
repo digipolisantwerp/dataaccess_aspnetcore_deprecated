@@ -51,3 +51,7 @@
 ## 2.5.0
 
 - Bugfix invalid cast exception when using GetCustomRepository
+
+## 2.5.1
+
+- Bugfix invalid cast exception when creating custom repositories

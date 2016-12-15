@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Digipolis.DataAccess.Uow
 {
-    public class UnitOfWorkBase<TContext> : IUnitOfWork where TContext : DbContext
+    public abstract class UnitOfWorkBase<TContext> : IUnitOfWorkBase where TContext : DbContext
     {
         protected internal UnitOfWorkBase(TContext context, IServiceProvider serviceProvider)
         {
@@ -42,12 +42,12 @@ namespace Digipolis.DataAccess.Uow
             CheckDisposed();
             var repositoryType = typeof(IRepository<TEntity>);
             var repository = (IRepository<TEntity>)_serviceProvider.GetService(repositoryType);
-			if ( repository == null )
-			{
-				throw new RepositoryNotFoundException(repositoryType.Name, String.Format("Repository {0} not found in the IOC container. Check if it is registered during startup.", repositoryType.Name));
-			}
+            if (repository == null)
+            {
+                throw new RepositoryNotFoundException(repositoryType.Name, String.Format("Repository {0} not found in the IOC container. Check if it is registered during startup.", repositoryType.Name));
+            }
 
-            ((IRepositoryInjection<TContext>)repository).SetContext(_context);
+            ((IRepositoryInjection)repository).SetContext(_context);
             return repository;
         }
 
@@ -61,15 +61,7 @@ namespace Digipolis.DataAccess.Uow
                 throw new RepositoryNotFoundException(repositoryType.Name, String.Format("Repository {0} not found in the IOC container. Check if it is registered during startup.", repositoryType.Name));
             }
 
-            try
-            {
-                ((IRepositoryInjection<TContext>)repository).SetContext(_context);
-            }
-            catch (InvalidCastException ex)
-            {
-                throw new InvalidCastException($"{ex.Message}, try creating your unit of work using the generic CreateUnitOfWork method.", ex);
-            }
-            
+            ((IRepositoryInjection)repository).SetContext(_context);
             return repository;
         }
 
@@ -79,16 +71,16 @@ namespace Digipolis.DataAccess.Uow
 
         protected void CheckDisposed()
         {
-            if ( _isDisposed ) throw new ObjectDisposedException("The UnitOfWork is already disposed and cannot be used anymore.");
+            if (_isDisposed) throw new ObjectDisposedException("The UnitOfWork is already disposed and cannot be used anymore.");
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if ( !_isDisposed )
+            if (!_isDisposed)
             {
-                if ( disposing )
+                if (disposing)
                 {
-                    if ( _context != null )
+                    if (_context != null)
                     {
                         _context.Dispose();
                         _context = null;

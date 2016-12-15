@@ -37,7 +37,7 @@ namespace Digipolis.DataAccess.Uow
             if (!trackChanges)
                 _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
-            var uow = new UnitOfWorkBase<TEntityContext>(_context, _serviceProvider);
+            var uow = new UnitOfWork(_context, _serviceProvider);
             return uow;
         }
     }
