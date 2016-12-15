@@ -18,7 +18,7 @@ namespace Digipolis.DataAccess.UnitTests.Repositories
         {
             _fooRepository = new GenericEntityRepository<Foo>(null);
             _context = InMemoryContext.Create();
-            ((IRepositoryInjection<DbContext>)_fooRepository).SetContext(_context);
+            ((IRepositoryInjection)_fooRepository).SetContext(_context);
         }
 
         private void AddEntitiesToContext(int count = 10)

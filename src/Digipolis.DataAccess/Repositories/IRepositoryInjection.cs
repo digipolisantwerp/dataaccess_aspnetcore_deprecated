@@ -2,8 +2,8 @@
 
 namespace Digipolis.DataAccess.Repositories
 {
-    public interface IRepositoryInjection<TContext> where TContext : DbContext
+    public interface IRepositoryInjection
     {
-        IRepositoryInjection<TContext> SetContext(TContext context);
+        IRepositoryInjection SetContext(DbContext context);
     }
 }
