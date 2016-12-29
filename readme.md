@@ -50,6 +50,8 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the projec
  }
 ```
 
+Make sure you have our Nuget feed configured (https://www.myget.org/F/digipolisantwerp/api/v3/index.json.).
+
 Alternatively, it can also be added via the NuGet Package Manager interface.
 
 ## Configuration in Startup.ConfigureServices
