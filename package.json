@@ -1,6 +1,6 @@
 {
-	"version": "2.4.0",
-	"name": "Digipolis.DataAccess",
+	"version": "2.5.2",
+	"name": "digipolis-dataaccess-framework",
 	"private": true,
 	"devDependencies": {
 		"gulp": "3.9.0",

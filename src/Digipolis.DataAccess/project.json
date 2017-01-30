@@ -1,5 +1,5 @@
 {
-  "version": "2.5.1-*",
+  "version": "2.5.2-*",
 
     "dependencies": {
         "Microsoft.EntityFrameworkCore": "1.0.0",
