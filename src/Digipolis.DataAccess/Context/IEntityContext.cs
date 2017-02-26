@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Digipolis.DataAccess.Context
 {
-    interface IEntityContext
+    public interface IEntityContext
     {
     }
 }
