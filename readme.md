@@ -42,11 +42,20 @@ It contains :
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ## Installation
 
-Adding the DataAccess Toolbox to a project is as easy as adding it to the project.json file :
+Adding the DataAccess Toolbox to a project is as easy as adding it to the csproj project file:
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="Digipolis.DataAccess" Version="3.0.0" />
+  </ItemGroup>
+``` 
+
+or if your project still works with project.json :
+
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "2.5.1",
+    "Digipolis.DataAccess":  "3.0.0",
  }
 ```
 

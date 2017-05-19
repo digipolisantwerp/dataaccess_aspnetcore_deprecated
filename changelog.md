@@ -1,5 +1,9 @@
 # DataAccess Toolbox Changelog
 
+## 3.0.0
+
+- conversion to csproj and MSBuild.
+
 ## 2.5.2
 
 - Recompilation to correct wrong dependencies.
