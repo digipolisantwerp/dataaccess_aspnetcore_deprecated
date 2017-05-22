@@ -55,7 +55,7 @@ or if your project still works with project.json :
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "3.0.0",
+    "Digipolis.DataAccess":  "3.0.0"
  }
 ```
 
