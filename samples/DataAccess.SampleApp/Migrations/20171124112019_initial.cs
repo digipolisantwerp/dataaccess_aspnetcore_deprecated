@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DataAccess.SampleApp.Migrations
 {
@@ -13,7 +14,7 @@ namespace DataAccess.SampleApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGeneratedOnAdd", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -26,7 +27,7 @@ namespace DataAccess.SampleApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGeneratedOnAdd", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     BuildingId = table.Column<int>(nullable: true),
                     Floor = table.Column<int>(nullable: false),
                     Number = table.Column<int>(nullable: false)
@@ -47,7 +48,7 @@ namespace DataAccess.SampleApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGeneratedOnAdd", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     AppartmentId = table.Column<int>(nullable: true),
                     Length = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
