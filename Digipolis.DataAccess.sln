@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3D5D0B67-478E-4734-83F5-9D9F612E5661}"
 EndProject
@@ -10,20 +10,19 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{708891CD-FD0A-455F-9ECE-9615ADDC7A64}"
 	ProjectSection(SolutionItems) = preProject
 		changelog.md = changelog.md
-		global.json = global.json
 		gulpfile.js = gulpfile.js
 		nuget.config = nuget.config
 		package.json = package.json
 		readme.md = readme.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.DataAccess.UnitTests", "test\Digipolis.DataAccess.UnitTests\Digipolis.DataAccess.UnitTests.xproj", "{FF0474FF-5844-4B0A-8B7B-47AC592BDE03}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.DataAccess", "src\Digipolis.DataAccess\Digipolis.DataAccess.xproj", "{9EA166E6-D15B-453F-A68E-8119BC472933}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D3A85B77-BCBF-455F-9882-A63809F8F8B0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DataAccess.SampleApp", "samples\DataAccess.SampleApp\DataAccess.SampleApp.xproj", "{C5A387B7-1E4A-441F-9571-389A76710710}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digipolis.DataAccess.UnitTests", "test\Digipolis.DataAccess.UnitTests\Digipolis.DataAccess.UnitTests.csproj", "{FF0474FF-5844-4B0A-8B7B-47AC592BDE03}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digipolis.DataAccess", "src\Digipolis.DataAccess\Digipolis.DataAccess.csproj", "{9EA166E6-D15B-453F-A68E-8119BC472933}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.SampleApp", "samples\DataAccess.SampleApp\DataAccess.SampleApp.csproj", "{C5A387B7-1E4A-441F-9571-389A76710710}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
