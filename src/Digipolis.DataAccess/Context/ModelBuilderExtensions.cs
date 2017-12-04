@@ -23,7 +23,9 @@ namespace Digipolis.DataAccess.Context
                 // Lowercase all properties
                 foreach ( var property in entityType.GetProperties() )
                 {
-                    property.Relational().ColumnName = property.Name.ToLower();
+                    //Check if property has a ColumnAttribute. If so, use the lowercased value of this attribute instead of lowercased property name
+                    var columnNameAttribute = property.GetAnnotations().FirstOrDefault(x => x.Name.ToLower().Contains("columnname"))?.Value;
+                    property.Relational().ColumnName = columnNameAttribute == null ? property.Name.ToLower() : columnNameAttribute.ToString().ToLower();
                 }
             }
         }

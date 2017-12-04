@@ -8,9 +8,10 @@ using DataAccess.SampleApp;
 namespace DataAccess.SampleApp.Migrations
 {
     [DbContext(typeof(SampleAppContext))]
-    partial class SampleAppContextModelSnapshot : ModelSnapshot
+    [Migration("20171124112019_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -19,65 +20,53 @@ namespace DataAccess.SampleApp.Migrations
             modelBuilder.Entity("DataAccess.SampleApp.Entities.Appartment", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id");
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BuildingId")
-                        .HasColumnName("buildingid");
+                    b.Property<int?>("BuildingId");
 
-                    b.Property<int>("Floor")
-                        .HasColumnName("floor");
+                    b.Property<int>("Floor");
 
-                    b.Property<int>("Number")
-                        .HasColumnName("number");
+                    b.Property<int>("Number");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingId");
 
-                    b.ToTable("appartment");
+                    b.ToTable("Appartment");
                 });
 
             modelBuilder.Entity("DataAccess.SampleApp.Entities.Building", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id");
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name")
-                        .HasColumnName("name");
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("building");
+                    b.ToTable("Buildings");
                 });
 
             modelBuilder.Entity("DataAccess.SampleApp.Entities.Room", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("id");
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("AppartmentId")
-                        .HasColumnName("appartmentid");
+                    b.Property<int?>("AppartmentId");
 
-                    b.Property<int>("Length")
-                        .HasColumnName("length");
+                    b.Property<int>("Length");
 
-                    b.Property<string>("Name")
-                        .HasColumnName("mynewroomname");
+                    b.Property<string>("Name");
 
-                    b.Property<int>("NumberOfDoors")
-                        .HasColumnName("numberofdoors");
+                    b.Property<int>("NumberOfDoors");
 
-                    b.Property<int>("Width")
-                        .HasColumnName("width");
+                    b.Property<int>("Width");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppartmentId");
 
-                    b.ToTable("room");
+                    b.ToTable("Room");
                 });
 
             modelBuilder.Entity("DataAccess.SampleApp.Entities.Appartment", b =>
