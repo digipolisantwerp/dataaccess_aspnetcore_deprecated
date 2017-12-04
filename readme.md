@@ -46,7 +46,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the csproj
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Digipolis.DataAccess" Version="3.0.0" />
+    <PackageReference Include="Digipolis.DataAccess" Version="3.0.1" />
   </ItemGroup>
 ``` 
 
@@ -55,7 +55,7 @@ or if your project still works with project.json :
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "3.0.0"
+    "Digipolis.DataAccess":  "3.0.1"
  }
 ```
 

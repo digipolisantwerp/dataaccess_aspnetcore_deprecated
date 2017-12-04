@@ -1,5 +1,9 @@
 # DataAccess Toolbox Changelog
 
+## 3.0.1
+
+- bugfix: columnattribute now works when using LowerCaseTablesAndFields modelbuilder extension
+
 ## 3.0.0
 
 - conversion to csproj and MSBuild.
