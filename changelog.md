@@ -1,5 +1,9 @@
 # DataAccess Toolbox Changelog
 
+## 4.0.0
+
+- update dependencies for .Net Core 2.0
+
 ## 3.0.1
 
 - bugfix: columnattribute now works when using LowerCaseTablesAndFields modelbuilder extension
