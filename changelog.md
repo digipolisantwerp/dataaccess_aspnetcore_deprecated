@@ -2,7 +2,7 @@
 
 ## 4.0.0
 
-- update dependencies for .Net Core 2.0
+- update dependencies for .Net Standard 2.0
 
 ## 3.0.1
 
