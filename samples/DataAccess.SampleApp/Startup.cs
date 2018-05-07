@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Digipolis.DataAccess;
 using Microsoft.Extensions.Options;
 using System.IO;
-using Microsoft.Extensions.PlatformAbstractions;
 
 namespace DataAccess.SampleApp
 {
