@@ -46,7 +46,7 @@ Adding the DataAccess Toolbox to a project is as easy as adding it to the csproj
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Digipolis.DataAccess" Version="3.0.1" />
+    <PackageReference Include="Digipolis.DataAccess" Version="4.0.0" />
   </ItemGroup>
 ``` 
 
@@ -55,9 +55,12 @@ or if your project still works with project.json :
 
 ``` json
  "dependencies": {
-    "Digipolis.DataAccess":  "3.0.1"
+    "Digipolis.DataAccess":  "4.0.0"
  }
 ```
+
+**For netcoreapp2.0-projects a package version >= 4.0.0 must be used.
+For netcoreapp1.x-projects use a package version < 4.0.0. A separate branch (netstandard_1_6) has been created to apply changes for the older version if necessary.**
 
 Make sure you have our Nuget feed configured (https://www.myget.org/F/digipolisantwerp/api/v3/index.json.).
 
