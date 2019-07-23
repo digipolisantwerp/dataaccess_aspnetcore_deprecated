@@ -1,7 +1,9 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Digipolis.DataAccess.Entities
 {
+    [Serializable]
     public class EntityBase
     {
         // This is the base class for all entities.
