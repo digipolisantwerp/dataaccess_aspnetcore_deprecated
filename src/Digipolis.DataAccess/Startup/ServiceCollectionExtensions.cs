@@ -19,7 +19,7 @@ namespace Digipolis.DataAccess
 
         private static void RegisterDataAccess<TEntityContext>(IServiceCollection services) where TEntityContext : EntityContextBase<TEntityContext>
         {
-            services.TryAddSingleton<IUowProvider, UowProvider>();
+            services.TryAddScoped<IUowProvider, UowProvider>();
             services.TryAddTransient<IEntityContext, TEntityContext>();
             services.TryAddTransient(typeof(IRepository<>), typeof(GenericEntityRepository<>));
             services.TryAddTransient(typeof(IDataPager<>), typeof(DataPager<>));

@@ -1,5 +1,9 @@
 # DataAccess Toolbox Changelog
 
+## 4.0.1
+
+- fixed dependency injection memory leak
+
 ## 4.0.0
 
 - update dependencies for .Net Standard 2.0
