@@ -14,7 +14,7 @@ namespace Digipolis.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTest
     public class AddDataAccessOptionsTests
     {
         [Fact]
-        private void UowProviderIsRegisteredAsSingleton()
+        private void UowProviderIsRegisteredAsScoped()
         {
             var services = new ServiceCollection();
 
@@ -24,7 +24,7 @@ namespace Digipolis.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTest
                                                && sd.ImplementationType == typeof(UowProvider))
                                         .ToArray();
             Assert.Equal(1, registrations.Count());
-            Assert.Equal(ServiceLifetime.Singleton, registrations[0].Lifetime);
+            Assert.Equal(ServiceLifetime.Scoped, registrations[0].Lifetime);
         }
 
         [Fact]
