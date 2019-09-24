@@ -7,6 +7,7 @@
     <PackageId>Digipolis.DataAccess</PackageId>
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
     <AssetTargetFallback>$(AssetTargetFallback);dnxcore50</AssetTargetFallback>
+    <Version>4.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
