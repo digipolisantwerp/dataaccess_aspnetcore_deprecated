@@ -1,5 +1,9 @@
 # DataAccess Toolbox Changelog
 
+## 4.0.4
+
+ - revert to 4.0.1 optimization issue with context disposal in UoW base
+
 ## 4.0.3
 
  - fix for repository disposal
