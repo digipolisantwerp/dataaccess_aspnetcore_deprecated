@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>4.0.3</VersionPrefix>
+    <VersionPrefix>4.0.4</VersionPrefix>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Digipolis.DataAccess</AssemblyName>
     <PackageId>Digipolis.DataAccess</PackageId>
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
     <AssetTargetFallback>$(AssetTargetFallback);dnxcore50</AssetTargetFallback>
-    <Version>4.0.3</Version>
+    <Version>4.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
