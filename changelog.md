@@ -1,5 +1,9 @@
 # DataAccess Toolbox Changelog
 
+## 4.0.3
+
+ - fix for repository disposal
+
 ## 4.0.2
 
  - improved memory management

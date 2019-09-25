@@ -21,8 +21,8 @@ namespace Digipolis.DataAccess
         {
             services.TryAddScoped<IUowProvider, UowProvider>();
             services.TryAddScoped<IEntityContext, TEntityContext>();
-            services.TryAddScoped(typeof(IRepository<>), typeof(GenericEntityRepository<>));
-            services.TryAddScoped(typeof(IDataPager<>), typeof(DataPager<>));
+            services.TryAddTransient(typeof(IRepository<>), typeof(GenericEntityRepository<>));
+            services.TryAddTransient(typeof(IDataPager<>), typeof(DataPager<>));
         }
 
         private static void ValidateMandatoryField(string field, string fieldName)
