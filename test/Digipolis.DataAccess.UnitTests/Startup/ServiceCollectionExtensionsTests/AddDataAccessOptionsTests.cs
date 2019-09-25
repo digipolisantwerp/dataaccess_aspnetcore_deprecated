@@ -28,7 +28,7 @@ namespace Digipolis.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTest
         }
 
         [Fact]
-        private void GenericRepositoryIsRegisteredAsScoped()
+        private void GenericRepositoryIsRegisteredAsTransient()
         {
             var services = new ServiceCollection();
 
@@ -38,11 +38,11 @@ namespace Digipolis.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTest
                                                && sd.ImplementationType == typeof(GenericEntityRepository<>))
                                         .ToArray();
             Assert.Equal(1, registrations.Count());
-            Assert.Equal(ServiceLifetime.Scoped, registrations[0].Lifetime);
+            Assert.Equal(ServiceLifetime.Transient, registrations[0].Lifetime);
         }
 
         [Fact]
-        private void DataPagerIsRegisteredAsScoped()
+        private void DataPagerIsRegisteredAsTransient()
         {
             var services = new ServiceCollection();
 
@@ -52,7 +52,7 @@ namespace Digipolis.DataAccess.UnitTests.Startup.ServiceCollectionExtensionsTest
                                                && sd.ImplementationType == typeof(DataPager<>))
                                         .ToArray();
             Assert.Equal(1, registrations.Count());
-            Assert.Equal(ServiceLifetime.Scoped, registrations[0].Lifetime);
+            Assert.Equal(ServiceLifetime.Transient, registrations[0].Lifetime);
         }
     }
 }
